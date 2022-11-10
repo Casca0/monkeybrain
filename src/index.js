@@ -1,4 +1,3 @@
-require('dotenv/config');
 const fs = require('node:fs');
 const path = require('node:path');
 const Sequelize = require('sequelize');
@@ -61,7 +60,7 @@ for (const file of eventFiles) {
 	}
 }
 
-// Test server
+// Server
 
 const app = express();
 
