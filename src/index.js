@@ -1,6 +1,7 @@
 require('dotenv/config');
 const fs = require('node:fs');
 const path = require('node:path');
+const Sequelize = require('sequelize');
 const { Client, Collection, GatewayIntentBits, Partials } = require('discord.js');
 const token = process.env['DISCORD_TOKEN'];
 
@@ -11,6 +12,15 @@ const client = new Client({
 
 client.commands = new Collection();
 client.newUsers = new Collection();
+client.cooldowns = new Collection();
+
+// Database
+
+const sequelize = new Sequelize('database', 'username', 'password', {
+	host: 'localhost',
+	dialect: 'sqlite',
+	storage: './src/database/database.sqlite',
+});
 
 // Command handler
 
@@ -35,6 +45,7 @@ for (const folder of commandsFolders) {
 // Event handler
 
 const eventsPath = path.join(__dirname, 'events');
+
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
 for (const file of eventFiles) {
@@ -42,7 +53,7 @@ for (const file of eventFiles) {
 	const event = require(filePath);
 
 	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args));
+		client.once(event.name, (...args) => event.execute(...args, sequelize));
 	}
 	else {
 		client.on(event.name, (...args) => event.execute(...args, client));

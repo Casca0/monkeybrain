@@ -21,7 +21,7 @@ module.exports = {
 		const banMessage = new EmbedBuilder({
 			color: 0xfc1e1e,
 			title: 'CEIFADO',
-			description: `Macaco ceifou ${user}`,
+			description: `Macaco ceifou ${user}!`,
 			thumbnail: {
 				url: user.avatarURL(),
 			},
@@ -36,7 +36,7 @@ module.exports = {
 		}
 		catch (err) {
 			console.log(err);
-			return await interaction.reply('Você provavelmente não tem a permissão necessária para usar este comando!');
+			return await interaction.reply('O user que você selecionou provavelmente não pode ser banido!');
 		}
 	},
 };

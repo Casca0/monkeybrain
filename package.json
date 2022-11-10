@@ -3,12 +3,15 @@
   "version": "1.0.0",
   "description": "Monkey brain but better",
   "main": "src/index.js",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "build-prod": "node src/utils/prod-deploy.js && node .",
-		"build-dev": "node src/utils/dev-deploy.js && node .",
+    "build-dev": "node src/utils/dev-deploy.js && node .",
     "dev": "nodemon --exec npm run build-dev",
-		"prod": "nodemon --exec npm run build-prod",
-		"start": "nodemon ."
+    "prod": "nodemon --exec npm run build-prod",
+    "start": "node ."
   },
   "repository": {
     "type": "git",
@@ -21,7 +24,9 @@
   },
   "homepage": "https://github.com/Casca0/monkeybrain2.0#readme",
   "dependencies": {
-    "discord.js": "^14.6.0"
+    "discord.js": "^14.6.0",
+    "sequelize": "^6.25.5",
+    "sqlite3": "^5.1.2"
   },
   "devDependencies": {
     "dotenv": "^16.0.3",

@@ -5,6 +5,7 @@ module.exports = {
 	name: Events.MessageUpdate,
 	async execute(message) {
 		if (!message.guild) return;
+		if (message.author.bot) return;
 
 		const logChannel = message.guild.channels.cache.get(logChannelId);
 
