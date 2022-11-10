@@ -2,6 +2,7 @@ require('dotenv/config');
 const fs = require('node:fs');
 const path = require('node:path');
 const Sequelize = require('sequelize');
+const express = require('express');
 const { Client, Collection, GatewayIntentBits, Partials } = require('discord.js');
 const token = process.env['DISCORD_TOKEN'];
 
@@ -59,5 +60,18 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args, client));
 	}
 }
+
+// Test server
+
+const app = express();
+
+app.get('/', (req, res) => {
+	res.send('Hello World!');
+});
+
+const port = 8080;
+app.listen(port, () => {
+	console.log(`helloworld: listening on port ${port}`);
+});
 
 client.login(token);
