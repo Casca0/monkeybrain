@@ -105,7 +105,3 @@ dist
 
 # Enviroment secrets
 .env
-
-# Docker
-
-.dockerignore
