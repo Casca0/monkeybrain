@@ -1,5 +1,5 @@
 const { Events, EmbedBuilder, inlineCode } = require('discord.js');
-const { logChannelId } = require('../config.json');
+const { logChannelId, devLogChannelId } = require('../config.json');
 
 module.exports = {
 	name: Events.MessageUpdate,
@@ -7,7 +7,7 @@ module.exports = {
 		if (!message.guild) return;
 		if (message.author.bot) return;
 
-		const logChannel = message.guild.channels.cache.get(logChannelId);
+		const logChannel = message.guild.channels.cache.get(logChannelId) || message.guild.channels.cache.get(devLogChannelId);
 
 		const newMessageContent = message.reactions.message.content;
 		const oldMessageContent = message.content;

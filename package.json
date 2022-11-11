@@ -7,10 +7,9 @@
     "node": "16.x"
   },
   "scripts": {
-    "build-prod": "node src/utils/prod-deploy.js && node .",
-    "build-dev": "node src/utils/dev-deploy.js && node .",
-    "dev": "nodemon --exec npm run build-dev",
-    "prod": "nodemon --exec npm run build-prod",
+    "build": "node src/utils/dev-deploy.js && node .",
+    "dev": "nodemon --exec npm run build",
+		"prestart": "node src/utils/prod-deploy.js",
     "start": "node ."
   },
   "repository": {

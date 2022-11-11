@@ -1,16 +1,12 @@
 const { Events, EmbedBuilder, inlineCode } = require('discord.js');
-const { logChannelId } = require('../config.json');
+const { logChannelId, devLogChannelId } = require('../config.json');
 
 module.exports = {
 	name: Events.MessageDelete,
 	async execute(message) {
 		if (!message.guild) return;
-		if (message.partial) {
-			console.log('DELETE EVENT', message);
-			await message.fetch();
-		}
 
-		const logChannel = message.guild.channels.cache.get(logChannelId);
+		const logChannel = message.guild.channels.cache.get(logChannelId) || message.guild.channels.cache.get(devLogChannelId);
 
 		const deletionEmbed = new EmbedBuilder({
 			color: 0xfc7303,
