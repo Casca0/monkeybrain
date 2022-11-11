@@ -17,8 +17,8 @@ module.exports = {
 
 		const defaultMacetaMessage = new EmbedBuilder({
 			color: 0xebe41c,
-			title: `VOCÊ ACABA DE MACETAR ${user}!`,
-			description: 'WIP',
+			title: 'WIP',
+			description: `VOCÊ ACABA DE MACETAR ${user}!`,
 			image: {
 				url: macetaGif,
 			},
