@@ -6,7 +6,12 @@ module.exports = {
 		.setDescription('Responde com pong!')
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
 		.setDMPermission(false),
-	async execute(interaction) {
-		return await interaction.reply('PONG!');
+	// rule: '0 */2 * * *',
+	// jobCooldown: true,
+	async execute(interaction, profileData) {
+
+		console.log(profileData);
+
+		return await interaction.reply('POING!');
 	},
 };

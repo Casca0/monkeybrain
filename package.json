@@ -7,9 +7,10 @@
     "node": "16.x"
   },
   "scripts": {
+    "sync-force": "node src/utils/sync-db.js --force",
+    "sync": "node src/utils/sync-db.js",
     "build": "node src/utils/dev-deploy.js && node .",
     "dev": "nodemon --exec npm run build",
-		"prestart": "node src/utils/prod-deploy.js",
     "start": "node ."
   },
   "repository": {
@@ -23,11 +24,14 @@
   },
   "homepage": "https://github.com/Casca0/monkeybrain2.0#readme",
   "dependencies": {
+    "@forestadmin/agent": "^1.4.5",
+    "@forestadmin/datasource-sequelize": "^1.2.0",
     "discord.js": "^14.6.0",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "node-schedule": "^2.1.0",
     "sequelize": "^6.25.5",
-    "sqlite3": "^5.1.2",
-		"dotenv": "^16.0.3"
+    "sqlite3": "^5.1.2"
   },
   "devDependencies": {
     "eslint": "^8.26.0",

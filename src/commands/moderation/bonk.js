@@ -5,17 +5,17 @@ module.exports = {
 		.setName('bonk')
 		.setDescription('Dê um bonk em alguém! (ADM)')
 		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
-		.addUserOption((option) =>
+		.addUserOption(option =>
 			option.setName('user')
 				.setDescription('Selecione um usuário para dar bonk')
 				.setRequired(true))
-		.addStringOption((option) =>
+		.addStringOption(option =>
 			option.setName('motivo')
 				.setDescription('Motivo do bonk (Opcional)'))
 		.setDMPermission(false),
 	async execute(interaction) {
 		const user = interaction.options.getUser('user');
-		const reason = interaction.options.getString('motivo') || '';
+		const reason = interaction.options.getString('motivo') || 'Sem motivo';
 		const resolvedUser = interaction.guild.members.resolve(user);
 
 		const bonkMessage = new EmbedBuilder({

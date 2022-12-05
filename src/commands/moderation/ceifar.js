@@ -5,17 +5,17 @@ module.exports = {
 		.setName('ceifar')
 		.setDescription('Ceifa alguém! (ADM)')
 		.setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
-		.addUserOption((option) =>
+		.addUserOption(option =>
 			option.setName('user')
 				.setDescription('Selecione um usuário para ser ceifado')
 				.setRequired(true))
-		.addStringOption((option) =>
+		.addStringOption(option =>
 			option.setName('motivo')
 				.setDescription('Motivo (Opcional)'))
 		.setDMPermission(false),
 	async execute(interaction) {
 		const user = interaction.options.getUser('user');
-		const reason = interaction.options.getString('motivo') || '';
+		const reason = interaction.options.getString('motivo') || 'Sem motivo';
 		const resolvedUser = interaction.guild.members.resolve(user);
 
 		const banMessage = new EmbedBuilder({

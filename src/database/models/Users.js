@@ -9,28 +9,40 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
+		profession: {
+			type: DataTypes.STRING,
+			defaultValue: 'Desempregado',
+		},
+		wallet_name: {
+			type: DataTypes.STRING,
+			defaultValue: 'Carteira',
+		},
+		wallet_color: {
+			type: DataTypes.STRING,
+			defaultValue: '#32a84a',
+		},
+		experience: {
+			type: DataTypes.INTEGER,
+			defaultValue: 0,
+		},
+		user_level: {
+			type: DataTypes.INTEGER,
+			defaultValue: 1,
+		},
 		coins: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
-			'default': 1000,
+			defaultValue: 1000,
 		},
 		bank: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
-			'default': 0,
+			defaultValue: 0,
 		},
 		maceta_counter: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
-			'default': 0,
-		},
-		wallet_name: {
-			type: DataTypes.STRING,
-			'default': 'Carteira',
-		},
-		wallet_color: {
-			type: DataTypes.STRING,
-			'default': '#32a84a',
+			defaultValue: 0,
 		},
 	}, {
 		timestamps: false,

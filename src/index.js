@@ -2,8 +2,11 @@ require('dotenv/config');
 const fs = require('node:fs');
 const path = require('node:path');
 const Sequelize = require('sequelize');
+const { createAgent } = require('@forestadmin/agent');
+const { createSequelizeDataSource } = require('@forestadmin/datasource-sequelize');
 const express = require('express');
 const { Client, Collection, GatewayIntentBits, Partials } = require('discord.js');
+
 const token = process.env['DISCORD_TOKEN'];
 
 const client = new Client({
@@ -14,6 +17,7 @@ const client = new Client({
 client.commands = new Collection();
 client.newUsers = new Collection();
 client.cooldowns = new Collection();
+client.jobCooldowns = new Collection();
 
 // Database
 
@@ -75,3 +79,11 @@ app.listen(port, () => {
 });
 
 client.login(token);
+
+// DB Dashboard
+
+createAgent({
+	authSecret: process.env.FOREST_AUTH_SECRET,
+	envSecret: process.env.FOREST_ENV_SECRET,
+	isProduction: process.env.NODE_ENV === 'production',
+}).addDataSource(createSequelizeDataSource(sequelize)).mountOnExpress(app).start();

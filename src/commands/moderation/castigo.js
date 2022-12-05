@@ -5,11 +5,11 @@ module.exports = {
 		.setName('castigo')
 		.setDescription('Coloque alguém de castigo (ADM)')
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-		.addUserOption((option) =>
+		.addUserOption(option =>
 			option.setName('user')
 				.setDescription('Selecione um usuário')
 				.setRequired(true))
-		.addIntegerOption((option) =>
+		.addIntegerOption(option =>
 			option.setName('tempo')
 				.setDescription('Tempo do castigo (Tempo padrão de 5 minutos)')
 				.addChoices(
@@ -20,7 +20,7 @@ module.exports = {
 					{ name: '25min', value: 25 },
 				),
 		)
-		.addStringOption((option) =>
+		.addStringOption(option =>
 			option.setName('motivo')
 				.setDescription('Motivo do castigo (Opcional)'),
 		)
@@ -29,7 +29,7 @@ module.exports = {
 	async execute(interaction) {
 		const user = interaction.options.getUser('user');
 		const time = interaction.options.getInteger('tempo') || 5;
-		const reason = interaction.options.getString('motivo') || '';
+		const reason = interaction.options.getString('motivo') || 'Sem motivo';
 		const resolvedUser = interaction.guild.members.resolve(user);
 		const formattedTime = time * 60000;
 
