@@ -9,9 +9,9 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		profession: {
+		profession_id: {
 			type: DataTypes.STRING,
-			defaultValue: 'Desempregado',
+			defaultValue: '1010012238750437396',
 		},
 		wallet_name: {
 			type: DataTypes.STRING,
@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
 		wallet_color: {
 			type: DataTypes.STRING,
 			defaultValue: '#32a84a',
+		},
+		wallet_image: {
+			type: DataTypes.STRING,
+			defaultValue: '',
 		},
 		experience: {
 			type: DataTypes.INTEGER,

@@ -17,8 +17,10 @@ module.exports = {
 
 		// If user doesn't have profileData, create it
 
+		let userData;
+
 		try {
-			const userData = await Users.findOne({
+			userData = await Users.findOne({
 				where: {
 					user_id: user.id,
 				},
@@ -28,20 +30,12 @@ module.exports = {
 				await Users.create({
 					user_id: user.id,
 					server_id: interaction.guildId,
-				});
+				}).then(res => userData = res);
 			}
 		}
 		catch (err) {
 			console.error(err);
 		}
-
-		// Fetch user data
-
-		const fetchedUserData = await Users.findOne({
-			where: {
-				user_id: user.id,
-			},
-		});
 
 		// Get random gif from JSON
 
@@ -115,8 +109,8 @@ module.exports = {
 			profileData.coins += 600;
 			profileData.save();
 
-			fetchedUserData.maceta_counter += 1;
-			fetchedUserData.save();
+			userData.maceta_counter += 1;
+			userData.save();
 
 			await interaction.reply({ embeds: [adminMessage] });
 
@@ -167,8 +161,8 @@ module.exports = {
 				profileData.coins += bananinhasAmount;
 				profileData.save();
 
-				fetchedUserData.maceta_counter += 1;
-				fetchedUserData.save();
+				userData.maceta_counter += 1;
+				userData.save();
 
 				await interaction.reply({ embeds: [defaultMacetaMessage] });
 			}

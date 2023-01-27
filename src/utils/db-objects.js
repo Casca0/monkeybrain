@@ -38,4 +38,19 @@ Reflect.defineProperty(Users.prototype, 'cleanAdverts', {
 	},
 });
 
-module.exports = { Users, UserItems, UserAdverts };
+Reflect.defineProperty(Users.prototype, 'getItems', {
+	value: async function getItems() {
+		try {
+			return await UserItems.findAll({
+				where: {
+					user_id: this.user_id,
+				},
+			});
+		}
+		catch (err) {
+			return console.error(err);
+		}
+	},
+});
+
+module.exports = { Users, UserItems, UserAdverts, sequelize };

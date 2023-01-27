@@ -6,7 +6,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('advertencia')
 		.setDescription('Comandos relacionados a advertências (ADM)')
-		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers || PermissionFlagsBits.BanMembers || PermissionFlagsBits.Administrator)
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('criar')
@@ -35,11 +35,24 @@ module.exports = {
 		const resolvedUser = interaction.guild.members.resolve(user);
 		const logChannel = interaction.guild.channels.cache.get(logChannelId) || interaction.guild.channels.cache.get(devLogChannelId);
 
-		const userData = await Users.findOne({
-			where: {
-				user_id: user.id,
-			},
-		});
+		let userData;
+
+		try {
+			userData = await Users.findOne({
+				where: {
+					user_id: user.id,
+				},
+			});
+			if (!userData) {
+				await Users.create({
+					user_id: user.id,
+					server_id: interaction.guildId,
+				}).then(res => userData = res);
+			}
+		}
+		catch (err) {
+			console.error(err);
+		}
 
 		if (command == 'criar') {
 			const reason = interaction.options.getString('motivo') || 'Sem motivo';
@@ -51,18 +64,20 @@ module.exports = {
 
 			const adverts = await userData.getAdverts();
 
+			if (adverts.length == 10) {
+				await resolvedUser.kick('Execesso de advertências.');
+			}
+
 			if (adverts.length >= 5) {
 				const timeoutAmount = ((adverts.length * 5) * 60000) + Date.now();
-				await resolvedUser.disableCommunicationUntil(timeoutAmount, `Excesso de advertências!
-				\nAdvertência mais recente:
-				\n${reason}`);
+				await resolvedUser.disableCommunicationUntil(timeoutAmount, `Excesso de advertências. Advertência mais recente: ${reason}`);
 			}
 
 			const logMessage = new EmbedBuilder({
 				color: 0x6734eb,
 				title: 'Membro Advertido',
 				thumbnail: {
-					url: interaction.user.avatarURL(),
+					url: user.avatarURL({ dynamic: true }),
 				},
 				fields: [
 					{
@@ -114,7 +129,7 @@ module.exports = {
 
 			const advertsAmount = await userData.cleanAdverts();
 
-			return await interaction.reply(`Foram excluídas ${inlineCode(advertsAmount)} advertências de ${user}!`);
+			return await interaction.reply(`Advertências excluidas de ${user} : ${inlineCode(advertsAmount)}`);
 		}
 	},
 };

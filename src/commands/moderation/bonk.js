@@ -4,7 +4,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('bonk')
 		.setDescription('Dê um bonk em alguém! (ADM)')
-		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
+		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers || PermissionFlagsBits.Administrator)
 		.addUserOption(option =>
 			option.setName('user')
 				.setDescription('Selecione um usuário para dar bonk')
@@ -33,7 +33,7 @@ module.exports = {
 			return await resolvedUser.kick(reason);
 		}
 		catch (err) {
-			console.log(err);
+			console.error(err);
 			return await interaction.reply('O user que você selecionou provavelmente não pode ser kickado!');
 		}
 	},

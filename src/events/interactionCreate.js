@@ -75,10 +75,10 @@ module.exports = {
 				},
 			});
 			if (!profileData) {
-				Users.create({
+				await Users.create({
 					user_id: interaction.user.id,
 					server_id: interaction.guildId,
-				});
+				}).then(res => profileData = res);
 			}
 		}
 		catch (err) {

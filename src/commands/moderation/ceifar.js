@@ -4,7 +4,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('ceifar')
 		.setDescription('Ceifa alguém! (ADM)')
-		.setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
+		.setDefaultMemberPermissions(PermissionFlagsBits.BanMembers || PermissionFlagsBits.Administrator)
 		.addUserOption(option =>
 			option.setName('user')
 				.setDescription('Selecione um usuário para ser ceifado')
@@ -35,7 +35,7 @@ module.exports = {
 			return await resolvedUser.ban({ reason: `${reason}` });
 		}
 		catch (err) {
-			console.log(err);
+			console.error(err);
 			return await interaction.reply('O user que você selecionou provavelmente não pode ser banido!');
 		}
 	},

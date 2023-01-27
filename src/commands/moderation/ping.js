@@ -8,9 +8,9 @@ module.exports = {
 		.setDMPermission(false),
 	// rule: '0 */2 * * *',
 	// jobCooldown: true,
-	async execute(interaction, profileData) {
+	async execute(interaction) {
 
-		console.log(profileData);
+		console.log('PONG');
 
 		return await interaction.reply('POING!');
 	},

@@ -4,7 +4,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('castigo')
 		.setDescription('Coloque alguém de castigo (ADM)')
-		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+		.setDefaultMemberPermissions(PermissionFlagsBits.BanMembers || PermissionFlagsBits.Administrator)
 		.addUserOption(option =>
 			option.setName('user')
 				.setDescription('Selecione um usuário')
@@ -54,7 +54,7 @@ module.exports = {
 			return await interaction.reply({ embeds: [timeoutMessage] });
 		}
 		catch (err) {
-			console.log(err);
+			console.error(err);
 			return await interaction.reply('O user que você selecionou provavelmente não pode ser mutado!');
 		}
 	},

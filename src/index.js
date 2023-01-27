@@ -1,11 +1,11 @@
 require('dotenv/config');
 const fs = require('node:fs');
 const path = require('node:path');
-const Sequelize = require('sequelize');
 const { createAgent } = require('@forestadmin/agent');
 const { createSequelizeDataSource } = require('@forestadmin/datasource-sequelize');
 const express = require('express');
 const { Client, Collection, GatewayIntentBits, Partials } = require('discord.js');
+const { sequelize } = require('./utils/db-objects');
 
 const token = process.env['DISCORD_TOKEN'];
 
@@ -18,14 +18,6 @@ client.commands = new Collection();
 client.newUsers = new Collection();
 client.cooldowns = new Collection();
 client.jobCooldowns = new Collection();
-
-// Database
-
-const sequelize = new Sequelize('database', 'username', 'password', {
-	host: 'localhost',
-	dialect: 'sqlite',
-	storage: './src/database/database.sqlite',
-});
 
 // Command handler
 

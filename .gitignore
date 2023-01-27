@@ -105,3 +105,8 @@ dist
 
 # Enviroment secrets
 .env
+
+# Development database
+
+.forestadmin-schema.json
+src/database/database.sqlite
