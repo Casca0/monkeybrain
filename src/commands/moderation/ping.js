@@ -6,12 +6,10 @@ module.exports = {
 		.setDescription('Responde com pong!')
 		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
 		.setDMPermission(false),
-	// rule: '0 */2 * * *',
-	// jobCooldown: true,
+	// eslint-disable-next-line no-unused-vars
 	async execute(interaction, profileData) {
+		console.log(profileData.inventory[0]);
 
-		console.log(profileData);
-
-		return await interaction.reply('POING!');
+		return interaction.followUp('POING!');
 	},
 };

@@ -1,12 +1,11 @@
 const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, inlineCode } = require('discord.js');
-const { UserAdverts, Users } = require('../../utils/db-objects');
-const { devLogChannelId, logChannelId } = require('../../config.json');
+const { userModel } = require('../../database/models/UserData.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('advertencia')
 		.setDescription('Comandos relacionados a advertências (ADM)')
-		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers || PermissionFlagsBits.BanMembers || PermissionFlagsBits.Administrator)
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('criar')
@@ -31,38 +30,39 @@ module.exports = {
 		.setDMPermission(false),
 	async execute(interaction) {
 		const command = interaction.options.getSubcommand();
+
 		const user = interaction.options.getUser('user');
 		const resolvedUser = interaction.guild.members.resolve(user);
-		const logChannel = interaction.guild.channels.cache.get(logChannelId) || interaction.guild.channels.cache.get(devLogChannelId);
 
-		const userData = await Users.findOne({
-			where: {
-				user_id: user.id,
-			},
-		});
+		const logChannel = interaction.guild.publicUpdatesChannel;
+
+		const record = await userModel.findOne({ user_id: user.id });
 
 		if (command == 'criar') {
 			const reason = interaction.options.getString('motivo') || 'Sem motivo';
 
-			await UserAdverts.create({
-				user_id: user.id,
+			record.adverts.push({
 				reason: reason,
 			});
 
-			const adverts = await userData.getAdverts();
+			record.save();
+
+			const adverts = record.adverts;
+
+			if (adverts.length == 10) {
+				await resolvedUser.kick('Execesso de advertências.');
+			}
 
 			if (adverts.length >= 5) {
 				const timeoutAmount = ((adverts.length * 5) * 60000) + Date.now();
-				await resolvedUser.disableCommunicationUntil(timeoutAmount, `Excesso de advertências!
-				\nAdvertência mais recente:
-				\n${reason}`);
+				await resolvedUser.disableCommunicationUntil(timeoutAmount, `Excesso de advertências. Advertência mais recente: ${reason}`);
 			}
 
 			const logMessage = new EmbedBuilder({
 				color: 0x6734eb,
 				title: 'Membro Advertido',
 				thumbnail: {
-					url: interaction.user.avatarURL(),
+					url: user.avatarURL({ dynamic: true }),
 				},
 				fields: [
 					{
@@ -104,7 +104,7 @@ module.exports = {
 				timestamp: new Date().toISOString(),
 			});
 
-			return await interaction.reply({ embeds: [advertMessage] });
+			return interaction.followUp({ embeds: [advertMessage] });
 		}
 
 		if (command == 'limpar') {
@@ -112,9 +112,17 @@ module.exports = {
 				await resolvedUser.disableCommunicationUntil(null);
 			}
 
-			const advertsAmount = await userData.cleanAdverts();
+			const advertsLength = record.adverts.length;
 
-			return await interaction.reply(`Foram excluídas ${inlineCode(advertsAmount)} advertências de ${user}!`);
+			if (advertsLength == 0) {
+				return interaction.followUp('Este user não tem advertências.');
+			}
+
+			record.adverts.length = 0;
+
+			record.save();
+
+			return interaction.followUp(`Advertências excluidas de ${user} : ${inlineCode(advertsLength)}`);
 		}
 	},
 };

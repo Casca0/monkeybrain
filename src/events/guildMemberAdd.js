@@ -5,7 +5,7 @@ module.exports = {
 	async execute(member, client) {
 		client.newUsers.set(member.id, member.user);
 
-		const defaultChannel = member.guild.channels.cache.get(member.guild.systemChannelId);
+		const defaultChannel = member.guild.systemChannel;
 		const userList = client.newUsers.map(u => u.toString()).join(' ');
 
 		const welcomeMessage = new EmbedBuilder({

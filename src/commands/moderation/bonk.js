@@ -4,7 +4,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('bonk')
 		.setDescription('Dê um bonk em alguém! (ADM)')
-		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
+		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers || PermissionFlagsBits.Administrator)
 		.addUserOption(option =>
 			option.setName('user')
 				.setDescription('Selecione um usuário para dar bonk')
@@ -29,12 +29,12 @@ module.exports = {
 		});
 
 		try {
-			await interaction.reply({ embeds: [bonkMessage] });
+			interaction.followUp({ embeds: [bonkMessage] });
 			return await resolvedUser.kick(reason);
 		}
 		catch (err) {
-			console.log(err);
-			return await interaction.reply('O user que você selecionou provavelmente não pode ser kickado!');
+			console.error(err);
+			return interaction.followUp('O user que você selecionou provavelmente não pode ser kickado!');
 		}
 	},
 };
