@@ -2,7 +2,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 const { macetaVisions } = require('./macetaInfo.json');
 
-const { Users } = require('../../utils/db-objects');
+const { userModel } = require('../../database/models/UserData.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -18,18 +18,11 @@ module.exports = {
 		// If user doesn't have profileData, create it
 
 		let userData;
-
 		try {
-			userData = await Users.findOne({
-				where: {
-					user_id: user.id,
-				},
-			});
-
-			if (!userData && !user.bot) {
-				await Users.create({
-					user_id: user.id,
-					server_id: interaction.guildId,
+			userData = await userModel.findOne({ user_id: interaction.user.id });
+			if (!userData) {
+				await userModel.create({
+					user_id: interaction.user.id,
 				}).then(res => userData = res);
 			}
 		}
@@ -85,7 +78,7 @@ module.exports = {
 			profileData.maceta_counter += 1;
 			profileData.save();
 
-			await interaction.reply({ embeds: [selfMacetaMessage] });
+			interaction.followUp({ embeds: [selfMacetaMessage] });
 
 			break;
 
@@ -106,13 +99,14 @@ module.exports = {
 				},
 			});
 
+
 			profileData.coins += 600;
 			profileData.save();
 
 			userData.maceta_counter += 1;
 			userData.save();
 
-			await interaction.reply({ embeds: [adminMessage] });
+			interaction.followUp({ embeds: [adminMessage] });
 
 			break;
 
@@ -136,7 +130,7 @@ module.exports = {
 			profileData.maceta_counter += 1;
 			profileData.save();
 
-			await interaction.reply({ embeds: [monkeyMessage] });
+			interaction.followUp({ embeds: [monkeyMessage] });
 
 			break;
 		default:
@@ -155,7 +149,7 @@ module.exports = {
 					},
 				});
 
-				await interaction.reply({ embeds: [botMessage] });
+				return interaction.followUp({ embeds: [botMessage] });
 			}
 			else {
 				profileData.coins += bananinhasAmount;
@@ -164,7 +158,7 @@ module.exports = {
 				userData.maceta_counter += 1;
 				userData.save();
 
-				await interaction.reply({ embeds: [defaultMacetaMessage] });
+				return interaction.followUp({ embeds: [defaultMacetaMessage] });
 			}
 		}
 	},

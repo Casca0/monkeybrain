@@ -1,10 +1,9 @@
 const { Events, AuditLogEvent, EmbedBuilder } = require('discord.js');
-const { logChannelId, devLogChannelId } = require('../config.json');
 
 module.exports = {
 	name: Events.GuildBanAdd,
 	async execute(ban) {
-		const logChannel = ban.guild.channels.cache.get(logChannelId) || ban.guild.channels.cache.get(devLogChannelId);
+		const logChannel = ban.guild.publicUpdatesChannel;
 
 		const fetchedLogs = await ban.guild.fetchAuditLogs({
 			limit: 1,

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, bold } = require('discord.js');
-const { Users } = require('../../utils/db-objects');
+const { userModel } = require('../../database/models/UserData.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -9,7 +9,7 @@ module.exports = {
 	async execute(interaction) {
 		await interaction.guild.members.fetch();
 
-		const usersData = await Users.findAll();
+		const usersData = await userModel.find({});
 
 		const rankingData = usersData.sort((a, b) => (b.coins + b.bank) - (a.coins + a.bank))
 			.filter(user => interaction.guild.members.cache.has(user.user_id)).slice(0, 10);
@@ -22,6 +22,6 @@ module.exports = {
 			color: 0xa11a15,
 		});
 
-		return interaction.reply({ embeds: [rankCard] });
+		return interaction.followUp({ embeds: [rankCard] });
 	},
 };

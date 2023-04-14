@@ -1,11 +1,10 @@
 const { Events, EmbedBuilder, AuditLogEvent } = require('discord.js');
-const { logChannelId, devLogChannelId } = require('../config.json');
 
 module.exports = {
 	name: Events.GuildMemberRemove,
 	async execute(member) {
-		const defaultChannel = member.guild.channels.cache.get(member.guild.systemChannelId);
-		const logChannel = member.guild.channels.cache.get(logChannelId) || member.guild.channels.cache.get(devLogChannelId);
+		const defaultChannel = member.guild.systemChannel;
+		const logChannel = member.guild.publicUpdatesChannel;
 
 		const removeMessage = new EmbedBuilder({
 			color: 0x18ed1f,

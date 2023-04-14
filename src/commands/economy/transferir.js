@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, inlineCode } = require('discord.js');
-const { Users } = require('../../utils/db-objects');
+const { userModel } = require('../../database/models/UserData.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -23,17 +23,13 @@ module.exports = {
 
 		const user = interaction.options.getUser('membro');
 
-		const userWallet = await Users.findOne({
-			where: {
-				user_id: user.id,
-			},
-		});
+		const userWallet = await userModel.findOne({ user_id: user.id });
 
 		if (quantity == 'tudo') quantity = profileData.coins;
 
-		if (quantity % 1 != 0 || quantity <= 0) return await interaction.reply('Informe um número inteiro!');
+		if (quantity % 1 != 0 || quantity <= 0) return interaction.followUp('Informe um número inteiro!');
 
-		if (quantity > profileData.coins) return await interaction.reply('Você não tem essa quantia de moedas!');
+		if (quantity > profileData.coins) return interaction.followUp('Você não tem essa quantia de moedas!');
 
 		profileData.coins -= quantity;
 		userWallet.coins += quantity;
@@ -41,6 +37,6 @@ module.exports = {
 		profileData.save();
 		userWallet.save();
 
-		return await interaction.reply(`Você transferiu :coin: ${inlineCode(quantity)} Bananinhas Reais para ${user}!`);
+		return interaction.followUp(`Você transferiu :coin: ${inlineCode(quantity)} Bananinhas Reais para ${user}!`);
 	},
 };

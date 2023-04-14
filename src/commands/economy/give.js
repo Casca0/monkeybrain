@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits, inlineCode } = require('discord.js');
-const { Users } = require('../../utils/db-objects');
+const { userModel } = require('../../database/models/UserData.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -23,21 +23,17 @@ module.exports = {
 		const user = interaction.options.getUser('membro');
 
 		if (user) {
-			const userWallet = await Users.findOne({
-				where: {
-					user_id: user.id,
-				},
-			});
+			const userWallet = await userModel.findOne({ user_id: user.id });
 
 			userWallet.coins += quantity;
 			userWallet.save();
 
-			return await interaction.reply({ content: `Você deu :coin: ${inlineCode(quantity)} Bananinhas Reais para ${user}!`, ephemeral: true });
+			return interaction.followUp({ content: `Você deu :coin: ${inlineCode(quantity)} Bananinhas Reais para ${user}!`, ephemeral: true });
 		}
 
 		profileData.coins += quantity;
 		profileData.save();
 
-		return await interaction.reply({ content: `Você deu para si :coin: ${inlineCode(quantity)} Bananinhas Reais!`, ephemeral: true });
+		return interaction.followUp({ content: `Você deu para si :coin: ${inlineCode(quantity)} Bananinhas Reais!`, ephemeral: true });
 	},
 };

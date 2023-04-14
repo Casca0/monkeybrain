@@ -1,6 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, inlineCode } = require('discord.js');
-const { UserAdverts, Users } = require('../../utils/db-objects');
-const { devLogChannelId, logChannelId } = require('../../config.json');
+const { userModel } = require('../../database/models/UserData.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -31,38 +30,24 @@ module.exports = {
 		.setDMPermission(false),
 	async execute(interaction) {
 		const command = interaction.options.getSubcommand();
+
 		const user = interaction.options.getUser('user');
 		const resolvedUser = interaction.guild.members.resolve(user);
-		const logChannel = interaction.guild.channels.cache.get(logChannelId) || interaction.guild.channels.cache.get(devLogChannelId);
 
-		let userData;
+		const logChannel = interaction.guild.publicUpdatesChannel;
 
-		try {
-			userData = await Users.findOne({
-				where: {
-					user_id: user.id,
-				},
-			});
-			if (!userData) {
-				await Users.create({
-					user_id: user.id,
-					server_id: interaction.guildId,
-				}).then(res => userData = res);
-			}
-		}
-		catch (err) {
-			console.error(err);
-		}
+		const record = await userModel.findOne({ user_id: user.id });
 
 		if (command == 'criar') {
 			const reason = interaction.options.getString('motivo') || 'Sem motivo';
 
-			await UserAdverts.create({
-				user_id: user.id,
+			record.adverts.push({
 				reason: reason,
 			});
 
-			const adverts = await userData.getAdverts();
+			record.save();
+
+			const adverts = record.adverts;
 
 			if (adverts.length == 10) {
 				await resolvedUser.kick('Execesso de advertências.');
@@ -119,7 +104,7 @@ module.exports = {
 				timestamp: new Date().toISOString(),
 			});
 
-			return await interaction.reply({ embeds: [advertMessage] });
+			return interaction.followUp({ embeds: [advertMessage] });
 		}
 
 		if (command == 'limpar') {
@@ -127,9 +112,17 @@ module.exports = {
 				await resolvedUser.disableCommunicationUntil(null);
 			}
 
-			const advertsAmount = await userData.cleanAdverts();
+			const advertsLength = record.adverts.length;
 
-			return await interaction.reply(`Advertências excluidas de ${user} : ${inlineCode(advertsAmount)}`);
+			if (advertsLength == 0) {
+				return interaction.followUp('Este user não tem advertências.');
+			}
+
+			record.adverts.length = 0;
+
+			record.save();
+
+			return interaction.followUp(`Advertências excluidas de ${user} : ${inlineCode(advertsLength)}`);
 		}
 	},
 };

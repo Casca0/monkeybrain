@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, ButtonBuilder, EmbedBuilder, ActionRowBuilder, inlineCode, ComponentType, ButtonStyle } = require('discord.js');
+
 const shop = require('../../database/models/ShopItems').items;
-const { UserItems } = require('../../utils/db-objects');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -62,11 +62,11 @@ module.exports = {
 
 		if (command == 'info') {
 			const itemId = interaction.options.getInteger('id');
-			const item = shop.filter(items => { return items.itemID == itemId; });
+			const item = shop.find(items => items.itemID == itemId);
 
-			if (!item) return await interaction.reply('Informe um item válido!');
+			if (!item) return interaction.followUp('Informe um item válido!');
 
-			const itemUseDescription = item[0].useDescription || 'Não possui uso.';
+			const itemUseDescription = item.useDescription || 'Não possui uso.';
 
 			const infoCard = new EmbedBuilder({
 				title: ':information_source: Info',
@@ -74,7 +74,7 @@ module.exports = {
 				fields: [
 					{
 						name: 'Nome do item',
-						value: inlineCode(item[0].name),
+						value: inlineCode(item.name),
 					},
 					{
 						name: 'Uso do item',
@@ -82,31 +82,26 @@ module.exports = {
 					},
 					{
 						name: 'Custo do item',
-						value: ':coin: ' + inlineCode(item[0].cost),
+						value: ':coin: ' + inlineCode(item.cost),
 					},
 				],
 				timestamp: new Date().toISOString(),
 			});
 
-			return await interaction.reply({ embeds: [infoCard] });
+			return interaction.followUp({ embeds: [infoCard] });
 		}
 
 		if (command == 'comprar') {
 			const itemId = interaction.options.getInteger('id');
 			const itemQuantity = interaction.options.getInteger('quantidade');
 
-			const item = shop.filter(items => { return items.itemID == itemId; });
+			const item = shop.find(items => items.itemID == itemId);
 
-			if (!item) return await interaction.reply('Informe um item válido!');
+			if (!item) return await interaction.followUp('Informe um item válido!');
 
-			const itemCost = item[0].cost * itemQuantity;
+			const itemCost = item.cost * itemQuantity;
 
-			const getItemInInventory = await UserItems.findOne({
-				where: {
-					user_id: interaction.user.id,
-					item_name: item[0].name,
-				},
-			});
+			const getItemInInventory = profileData.inventory.find(it => it.item_name == item.name);
 
 			const transactionReceipt = new EmbedBuilder({
 				title: 'Recibo',
@@ -117,7 +112,7 @@ module.exports = {
 				fields: [
 					{
 						name: 'Item',
-						value: inlineCode(item[0].name),
+						value: inlineCode(item.name),
 						inline: true,
 					},
 					{
@@ -137,36 +132,28 @@ module.exports = {
 			});
 
 			if (itemCost > profileData.coins) {
-				return await interaction.reply('Você não tem moedas suficientes para comprar este item!');
+				return await interaction.followUp('Você não tem moedas suficientes para comprar este item!');
 			}
 
 			if (getItemInInventory) {
 				getItemInInventory.amount += itemQuantity;
-				getItemInInventory.save();
 
 				profileData.coins -= itemCost;
 				profileData.save();
 
-				return interaction.reply({ embeds: [transactionReceipt] });
+				return interaction.followUp({ embeds: [transactionReceipt] });
 			}
 			else {
-				try {
-					await UserItems.create({
-						user_id: interaction.user.id,
-						item_id: item[0].itemID,
-						item_name: item[0].name,
-						amount: itemQuantity,
-					});
+				profileData.inventory.push({
+					item_id: item.itemID,
+					item_name: item.name,
+					amount: itemQuantity,
+				});
 
-					profileData.coins -= itemCost;
-					profileData.save();
+				profileData.coins -= itemCost;
+				profileData.save();
 
-					return interaction.reply({ embeds: [transactionReceipt] });
-				}
-				catch (err) {
-					console.error(err);
-					return interaction.reply('Ocorreu um erro ao criar o inventário!');
-				}
+				return interaction.followUp({ embeds: [transactionReceipt] });
 			}
 		}
 
@@ -174,29 +161,24 @@ module.exports = {
 			const itemId = interaction.options.getInteger('id');
 			const itemQuantity = interaction.options.getInteger('quantidade');
 
-			const item = shop.filter(items => { return items.itemID == itemId; });
+			const item = shop.find(items => items.itemID == itemId);
 
-			if (!item) return await interaction.reply('Informe um item válido!');
+			if (!item) return interaction.followUp('Informe um item válido!');
 
-			const sellCost = (item[0].cost * itemQuantity) * (75 / 100);
+			const sellCost = (item.cost * itemQuantity) * (75 / 100);
 
-			const getItemInInventory = await UserItems.findOne({
-				where: {
-					user_id: interaction.user.id,
-					item_name: item[0].name,
-				},
-			});
+			const getItemInInventory = profileData.inventory.find(it => it.item_name = item.name);
 
-			if (!getItemInInventory) return await interaction.reply('Você não possui este item!');
+			if (!getItemInInventory) return interaction.followUp('Você não possui este item!');
 
-			if (itemQuantity > getItemInInventory.amount) return await interaction.reply('Você não possui essa quantia deste item!');
+			if (itemQuantity > getItemInInventory.amount) return interaction.followUp('Você não possui essa quantia deste item!');
 
 			if (getItemInInventory.amount == 1 || getItemInInventory.amount - itemQuantity <= 0) {
-				getItemInInventory.destroy();
+				const index = profileData.inventory.findIndex(it => it.item_name == item.name);
+				profileData.inventory.splice(index, 1);
 			}
 			else {
 				getItemInInventory.amount -= itemQuantity;
-				getItemInInventory.save();
 			}
 
 			profileData.coins += sellCost;
@@ -208,7 +190,7 @@ module.exports = {
 				fields: [
 					{
 						name: 'Item',
-						value: inlineCode(item[0].name),
+						value: inlineCode(item.name),
 						inline: true,
 					},
 					{
@@ -224,7 +206,7 @@ module.exports = {
 				timestamp: new Date().toISOString(),
 			});
 
-			return await interaction.reply({ embeds: [transactionReceipt] });
+			return interaction.followUp({ embeds: [transactionReceipt] });
 		}
 
 		if (command == 'mostrar') {
@@ -271,7 +253,7 @@ module.exports = {
 
 				const canFitInOnePage = shop.length <= 5;
 
-				const interactionReply = await interaction.reply({
+				const interactionReply = await interaction.followUp({
 					embeds: [await generateShopEmbed(0)],
 					components: canFitInOnePage ? [] : [new ActionRowBuilder({
 						components: [forwardButton],
@@ -306,7 +288,7 @@ module.exports = {
 			}
 			catch (err) {
 				console.error(err);
-				return await interaction.reply('Ocorreu um erro ao gerar a loja!');
+				return interaction.followUp('Ocorreu um erro ao gerar a loja!');
 			}
 		}
 	},

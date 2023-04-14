@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, inlineCode } = require('discord.js');
-const { Users } = require('../../utils/db-objects');
+const { userModel } = require('../../database/models/UserData.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -63,13 +63,10 @@ module.exports = {
 
 			const walletColor = parseInt(profileData.wallet_color.replace(/^#/, ''), 16);
 
-			const resolvedRole = await interaction.guild.roles.resolve(profileData.profession_id);
-
-			const adverts = await profileData.getAdverts();
+			const adverts = profileData.adverts;
 
 			const walletEmbed = new EmbedBuilder({
 				title: `${profileData.wallet_name}`,
-				description: `${resolvedRole.name}`,
 				color: walletColor,
 				thumbnail: {
 					url: interaction.user.avatarURL({ dynamic: true }),
@@ -99,21 +96,17 @@ module.exports = {
 				],
 			});
 
-			return await interaction.reply({ embeds: [walletEmbed] });
+			return interaction.followUp({ embeds: [walletEmbed] });
 		}
 
 		if (command == 'ver') {
 			const member = interaction.options.getUser('user');
 
-			const userData = await Users.findOne({
-				where: {
-					user_id: member.id,
-				},
-			});
+			const userData = await userModel.findOne({ user_id: member.id });
 
-			if (!userData) return await interaction.reply('Este user não possui uma carteira!');
+			if (!userData) return interaction.followUp('Este user não possui uma carteira!');
 
-			const adverts = await userData.getAdverts();
+			const adverts = userData.adverts;
 
 			const walletColor = parseInt(userData.wallet_color.replace(/^#/, ''), 16);
 
@@ -145,15 +138,16 @@ module.exports = {
 				],
 			});
 
-			return await interaction.reply({ embeds: [walletEmbed] });
+			return interaction.followUp({ embeds: [walletEmbed] });
 		}
 
 		if (command == 'nome') {
 			const newName = interaction.options.getString('nome');
+
 			profileData.wallet_name = newName;
 			profileData.save();
 
-			return await interaction.reply(`O nome da sua carteira foi alterado para : ${inlineCode(newName)}`);
+			return interaction.followUp(`O nome da sua carteira foi alterado para : ${inlineCode(newName)}`);
 		}
 
 		if (command == 'imagem') {
@@ -162,7 +156,7 @@ module.exports = {
 			const urlTest = urlRegex.test(newImage);
 
 			if (!urlTest) {
-				return await interaction.reply('Informe um link válido!');
+				return interaction.followUp('Informe um link válido!');
 			}
 
 			profileData.wallet_image = newImage;
@@ -176,7 +170,7 @@ module.exports = {
 				},
 			});
 
-			return await interaction.reply({ embeds: [imageCard], ephemeral: true });
+			return interaction.followUp({ embeds: [imageCard], ephemeral: true });
 		}
 
 		if (command == 'cor') {
@@ -185,13 +179,13 @@ module.exports = {
 			const testColor = regexForColor.test(newColor);
 
 			if (!testColor) {
-				return await interaction.reply('Informe um código HEX válido para uma cor!');
+				return interaction.followUp('Informe um código HEX válido para uma cor!');
 			}
 
 			profileData.wallet_color = newColor;
 			profileData.save();
 
-			return await interaction.reply(`A cor da sua carteira foi alterada para : ${inlineCode(newColor)}`);
+			return interaction.followUp(`A cor da sua carteira foi alterada para : ${inlineCode(newColor)}`);
 		}
 	},
 };

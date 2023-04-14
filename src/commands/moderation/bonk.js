@@ -29,12 +29,12 @@ module.exports = {
 		});
 
 		try {
-			await interaction.reply({ embeds: [bonkMessage] });
+			interaction.followUp({ embeds: [bonkMessage] });
 			return await resolvedUser.kick(reason);
 		}
 		catch (err) {
 			console.error(err);
-			return await interaction.reply('O user que você selecionou provavelmente não pode ser kickado!');
+			return interaction.followUp('O user que você selecionou provavelmente não pode ser kickado!');
 		}
 	},
 };

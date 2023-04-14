@@ -11,19 +11,19 @@ module.exports = {
 				.setRequired(true),
 		)
 		.setDMPermission(false),
-	async execute(interaction, profileData) {
+	execute(interaction, profileData) {
 		let quantity = interaction.options.getString('quantia');
 
 		if (quantity == 'tudo') quantity = profileData.coins;
 
-		if (quantity % 1 != 0 || quantity <= 0) return await interaction.reply('O depósito tem que ser um número inteiro!');
+		if (quantity % 1 != 0 || quantity <= 0) return interaction.followUp('O depósito tem que ser um número inteiro!');
 
-		if (quantity > profileData.coins) return await interaction.reply('Você não tem essa quantia de moedas!');
+		if (quantity > profileData.coins) return interaction.followUp('Você não tem essa quantia de moedas!');
 
 		profileData.coins -= quantity;
 		profileData.bank += quantity;
 		profileData.save();
 
-		return await interaction.reply(`Você depositou :coin: ${inlineCode(quantity)} Bananinhas Reais no seu banco!`);
+		return interaction.followUp(`Você depositou :coin: ${inlineCode(quantity)} Bananinhas Reais no seu banco!`);
 	},
 };
