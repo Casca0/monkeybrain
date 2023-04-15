@@ -127,7 +127,12 @@ module.exports = {
 					},
 					{
 						name: 'Macetadas',
-						value: `:monkey: BR ${userData.maceta_counter}`,
+						value: `:monkey: ${userData.maceta_counter}`,
+						inline: true,
+					},
+					{
+						name: 'Advertências',
+						value: `:warning: ${adverts.length}`,
 						inline: true,
 					},
 					{
