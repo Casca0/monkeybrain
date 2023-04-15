@@ -135,11 +135,6 @@ module.exports = {
 						value: `:warning: ${adverts.length}`,
 						inline: true,
 					},
-					{
-						name: 'Advertências',
-						value: `:warning: ${adverts.length}`,
-						inline: true,
-					},
 				],
 			});
 
