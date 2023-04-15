@@ -4,7 +4,7 @@ const UserAdverts = new Schema({
 	reason: String,
 	date: {
 		type: String,
-		default: new Date.toISOString(),
+		default: Date.now().toString(),
 	},
 });
 
