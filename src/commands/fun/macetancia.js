@@ -9,7 +9,7 @@ module.exports = {
 		.setName('macetancia')
 		.setDescription('Macete um usuário aleatório!')
 		.setDMPermission(false),
-	cooldown: 300,
+	cooldown: 180,
 	async execute(interaction, profileData) {
 		await interaction.guild.members.fetch();
 
@@ -19,7 +19,7 @@ module.exports = {
 
 		let userData;
 		try {
-			userData = await userModel.findOne({ user_id: interaction.user.id });
+			userData = await userModel.findOne({ user_id: user.id });
 			if (!userData) {
 				await userModel.create({
 					user_id: interaction.user.id,
@@ -40,7 +40,7 @@ module.exports = {
 
 		// Create default embed message
 
-		const defaultMacetaMessage = new EmbedBuilder({
+		const macetaMessage = new EmbedBuilder({
 			color: 0xebe41c,
 			title: `Você ganhou ${bananinhasAmount} Bananinhas Reais :coin::banana:`,
 			description: `VOCÊ ACABA DE MACETAR ${user}!`,
@@ -61,44 +61,20 @@ module.exports = {
 		// Case ID from author
 
 		case interaction.user.id:
-			const selfMacetaMessage = new EmbedBuilder({
-				color: 0x1ce8e1,
-				title: 'Você se macetou, parabéns! :banana:',
-				description: 'WIP',
-				image: {
-					url: macetaGif,
-				},
-				timestamp: new Date().toISOString(),
-				footer: {
-					text: interaction.user.username,
-					icon_url: interaction.user.avatarURL(),
-				},
-			});
+			macetaMessage.setTitle('Você se macetou, parabéns! :banana:');
+			macetaMessage.setDescription('');
 
 			profileData.maceta_counter += 1;
 			profileData.save();
 
-			interaction.followUp({ embeds: [selfMacetaMessage] });
-
-			break;
+			return interaction.followUp({ embeds: [macetaMessage] });
 
 			// Case ID from admin
 
 		case '380198082811396097':
-			const adminMessage = new EmbedBuilder({
-				color: 0x1ad94d,
-				title: 'Você macetou o ADM',
-				description: 'E ganhou 600 Bananinhas Reais :coin::banana: por isso!',
-				image: {
-					url: 'https://media1.tenor.com/images/1d78b613692b7cfe01c2f2a4a0b2f6fc/tenor.gif?itemid=5072717',
-				},
-				timestamp: new Date().toISOString(),
-				footer: {
-					text: interaction.user.username,
-					icon_url: interaction.user.avatarURL(),
-				},
-			});
-
+			macetaMessage.setTitle('Você macetou o ADM');
+			macetaMessage.setDescription('E ganhou 600 Bananinhas Reais :coin::banana: por isso!');
+			macetaMessage.setImage('https://media1.tenor.com/images/1d78b613692b7cfe01c2f2a4a0b2f6fc/tenor.gif?itemid=5072717');
 
 			profileData.coins += 600;
 			profileData.save();
@@ -106,50 +82,27 @@ module.exports = {
 			userData.maceta_counter += 1;
 			userData.save();
 
-			interaction.followUp({ embeds: [adminMessage] });
-
-			break;
+			return interaction.followUp({ embeds: [macetaMessage] });
 
 			// Case ID from client
 
 		case '840221907622166579':
-			const monkeyMessage = new EmbedBuilder({
-				color: 0xd91a43,
-				title: 'VOCÊ TENTOU ME MACETAR?',
-				description: 'ENTÃO SEJA MACETADO!',
-				image: {
-					url: 'https://i.imgur.com/mWw7OIa.gif',
-				},
-				timestamp: new Date().toISOString(),
-				footer: {
-					text: interaction.user.username,
-					icon_url: interaction.user.avatarURL(),
-				},
-			});
+			macetaMessage.setTitle('VOCÊ TENTOU ME MACETAR?');
+			macetaMessage.setDescription('ENTÃO SEJA MACETADO!');
+			macetaMessage.setImage('https://i.imgur.com/mWw7OIa.gif');
 
 			profileData.maceta_counter += 1;
 			profileData.save();
 
-			interaction.followUp({ embeds: [monkeyMessage] });
+			return interaction.followUp({ embeds: [macetaMessage] });
 
-			break;
 		default:
 			if (user.bot == true) {
-				const botMessage = new EmbedBuilder({
-					color: 0x8d9696,
-					title: 'MACETOU UM BOT',
-					description: `TCHU TCHU | ${user}`,
-					image: {
-						url: 'https://c.tenor.com/ebTWNO6KmNYAAAAC/picapau-puchapenas.gif',
-					},
-					timestamp: new Date().toISOString(),
-					footer: {
-						text: interaction.user.username,
-						icon_url: interaction.user.avatarURL(),
-					},
-				});
+				macetaMessage.setTitle('MACETOU UM BOT');
+				macetaMessage.setDescription(`TCHU TCHU | ${user}`);
+				macetaMessage.setImage('https://c.tenor.com/ebTWNO6KmNYAAAAC/picapau-puchapenas.gif');
 
-				return interaction.followUp({ embeds: [botMessage] });
+				return interaction.followUp({ embeds: [macetaMessage] });
 			}
 			else {
 				profileData.coins += bananinhasAmount;
@@ -158,7 +111,7 @@ module.exports = {
 				userData.maceta_counter += 1;
 				userData.save();
 
-				return interaction.followUp({ embeds: [defaultMacetaMessage] });
+				return interaction.followUp({ embeds: [macetaMessage] });
 			}
 		}
 	},
