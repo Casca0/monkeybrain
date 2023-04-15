@@ -38,7 +38,7 @@ module.exports = {
 
 		const bananinhasAmount = Math.floor(Math.random() * 450) + 1;
 
-		// Create default embed message
+		// Create embed message
 
 		const macetaMessage = new EmbedBuilder({
 			color: 0xebe41c,
@@ -67,7 +67,9 @@ module.exports = {
 			profileData.maceta_counter += 1;
 			profileData.save();
 
-			return interaction.followUp({ embeds: [macetaMessage] });
+			interaction.followUp({ embeds: [macetaMessage] });
+
+			break;
 
 			// Case ID from admin
 
@@ -82,7 +84,9 @@ module.exports = {
 			userData.maceta_counter += 1;
 			userData.save();
 
-			return interaction.followUp({ embeds: [macetaMessage] });
+			interaction.followUp({ embeds: [macetaMessage] });
+
+			break;
 
 			// Case ID from client
 
@@ -94,8 +98,9 @@ module.exports = {
 			profileData.maceta_counter += 1;
 			profileData.save();
 
-			return interaction.followUp({ embeds: [macetaMessage] });
+			interaction.followUp({ embeds: [macetaMessage] });
 
+			break;
 		default:
 			if (user.bot == true) {
 				macetaMessage.setTitle('MACETOU UM BOT');
