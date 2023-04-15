@@ -25,7 +25,6 @@ module.exports = {
 				.setDescription('Motivo do castigo (Opcional)'),
 		)
 		.setDMPermission(false),
-	cooldown: 160,
 	async execute(interaction) {
 		const user = interaction.options.getUser('user');
 		const time = interaction.options.getInteger('tempo') || 5;
