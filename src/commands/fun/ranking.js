@@ -17,7 +17,7 @@ module.exports = {
 		const rankCard = new EmbedBuilder({
 			title: 'Top 10 mais ricos do servidor',
 			description: rankingData
-				.map((user, position) => `${bold(position + 1)} - ${(interaction.guild.members.cache.get(user.user_id))}: ${user.coins} :dollar: - ${user.bank} :coin:`)
+				.map((user, position) => `${bold(position + 1)} - ${(interaction.guild.members.cache.find(member => member.id == user.user_id))}: ${user.coins} :dollar: - ${user.bank} :coin:`)
 				.join('\n'),
 			color: 0xa11a15,
 		});
