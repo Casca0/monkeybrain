@@ -2,7 +2,7 @@ const { Events, EmbedBuilder, inlineCode } = require('discord.js');
 
 module.exports = {
 	name: Events.MessageUpdate,
-	async execute(message) {
+	execute(message) {
 		if (!message.guild) return;
 
 		if (message.author.bot) return;
@@ -46,7 +46,7 @@ module.exports = {
 			},
 		});
 
-		logChannel.send({ embeds: [editEmbed] });
+		return logChannel.send({ embeds: [editEmbed] });
 
 	},
 };

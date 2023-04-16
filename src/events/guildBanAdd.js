@@ -38,6 +38,6 @@ module.exports = {
 			timestamp: new Date().toISOString(),
 		});
 
-		logChannel.send({ embeds: [banLogMessage] });
+		return logChannel.send({ embeds: [banLogMessage] });
 	},
 };

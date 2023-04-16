@@ -49,5 +49,6 @@ module.exports = {
 
 		logChannel.send({ embeds: [kickMessage] });
 		defaultChannel.send({ embeds: [removeMessage] });
+		return;
 	},
 };

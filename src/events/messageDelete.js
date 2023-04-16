@@ -37,7 +37,7 @@ module.exports = {
 			},
 		});
 
-		logChannel.send({ embeds: [deletionEmbed] });
+		return logChannel.send({ embeds: [deletionEmbed] });
 
 	},
 };

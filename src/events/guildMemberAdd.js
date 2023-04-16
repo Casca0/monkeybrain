@@ -2,7 +2,7 @@ const { Events, EmbedBuilder } = require('discord.js');
 
 module.exports = {
 	name: Events.GuildMemberAdd,
-	async execute(member, client) {
+	execute(member, client) {
 		client.newUsers.set(member.id, member.user);
 
 		const defaultChannel = member.guild.systemChannel;
@@ -17,6 +17,6 @@ module.exports = {
 			},
 		});
 
-		defaultChannel.send({ embeds: [welcomeMessage] });
+		return defaultChannel.send({ embeds: [welcomeMessage] });
 	},
 };
