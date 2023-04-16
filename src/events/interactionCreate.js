@@ -4,15 +4,13 @@ const { userModel } = require('../database/models/UserData.js');
 module.exports = {
 	name: Events.InteractionCreate,
 	async execute(interaction, client) {
-		if (!interaction.isChatInputCommand()) return;
+		const { cooldowns, commands } = client;
 
-		const command = interaction.client.commands.get(interaction.commandName);
+		const command = commands.get(interaction.commandName);
 
 		await interaction.deferReply();
 
 		// Command cooldown
-
-		const { cooldowns } = client;
 
 		if (!cooldowns.has(command.data.name)) {
 			cooldowns.set(command.data.name, new Collection());
@@ -55,12 +53,23 @@ module.exports = {
 
 		// Executing command
 
-		try {
-			await command.execute(interaction, profileData);
+		if (interaction.isChatInputCommand()) {
+			try {
+				await command.execute(interaction);
+			}
+			catch (e) {
+				console.error(e);
+				return interaction.followUp(`Ocorreu um erro\n${e}`);
+			}
 		}
-		catch (err) {
-			console.error(err);
-			return interaction.followUp(`Ocorreu um erro ao tentar executar este comando: ${err}`);
+		else if (interaction.isUserContextMenuCommand()) {
+			try {
+				await command.execute(interaction);
+			}
+			catch (e) {
+				console.error(e);
+				return interaction.followUp(`Ocorreu um erro\n${e}`);
+			}
 		}
 	},
 };
