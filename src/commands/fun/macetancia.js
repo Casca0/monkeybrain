@@ -22,7 +22,7 @@ module.exports = {
 			userData = await userModel.findOne({ user_id: user.id });
 			if (!userData) {
 				await userModel.create({
-					user_id: interaction.user.id,
+					user_id: user.id,
 				}).then(res => userData = res);
 			}
 		}
@@ -112,6 +112,10 @@ module.exports = {
 			else {
 				profileData.coins += bananinhasAmount;
 				profileData.save();
+
+				if (bananinhasAmount < userData.coins) {
+					userData.coins -= bananinhasAmount;
+				}
 
 				userData.maceta_counter += 1;
 				userData.save();

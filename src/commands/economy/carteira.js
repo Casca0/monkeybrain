@@ -1,5 +1,4 @@
 const { SlashCommandBuilder, EmbedBuilder, inlineCode } = require('discord.js');
-const { userModel } = require('../../database/models/UserData.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -8,19 +7,8 @@ module.exports = {
 		.setDMPermission(false)
 		.addSubcommand(subcommand =>
 			subcommand
-				.setName('mostrar')
-				.setDescription('Mostra a sua carteira!'),
-		)
-		.addSubcommand(subcommand =>
-			subcommand
 				.setName('ver')
-				.setDescription('Ver a carteira de alguém!')
-				.addUserOption(option =>
-					option
-						.setName('user')
-						.setDescription('Caso queira ver a carteira de alguém, selecione o user!')
-						.setRequired(true),
-				),
+				.setDescription('Veja a sua carteira!'),
 		)
 		.addSubcommand(subcommand =>
 			subcommand
@@ -59,7 +47,7 @@ module.exports = {
 
 		const command = interaction.options.getSubcommand();
 
-		if (command == 'mostrar') {
+		if (command == 'ver') {
 
 			const walletColor = parseInt(profileData.wallet_color.replace(/^#/, ''), 16);
 
@@ -86,48 +74,6 @@ module.exports = {
 					{
 						name: 'Macetadas',
 						value: `:monkey: ${profileData.maceta_counter}`,
-						inline: true,
-					},
-					{
-						name: 'Advertências',
-						value: `:warning: ${adverts.length}`,
-						inline: true,
-					},
-				],
-			});
-
-			return interaction.followUp({ embeds: [walletEmbed] });
-		}
-
-		if (command == 'ver') {
-			const member = interaction.options.getUser('user');
-
-			const userData = await userModel.findOne({ user_id: member.id });
-
-			if (!userData) return interaction.followUp('Este user não possui uma carteira!');
-
-			const adverts = userData.adverts;
-
-			const walletColor = parseInt(userData.wallet_color.replace(/^#/, ''), 16);
-
-			const walletEmbed = new EmbedBuilder({
-				title: `${userData.wallet_name}`,
-				color: walletColor,
-				thumbnail: {
-					url: member.avatarURL({ dynamic: true }),
-				},
-				fields: [
-					{
-						name: 'Carteira',
-						value: `:dollar: BR ${userData.coins}`,
-					},
-					{
-						name: 'Banco',
-						value: `:coin: BR ${userData.bank}`,
-					},
-					{
-						name: 'Macetadas',
-						value: `:monkey: ${userData.maceta_counter}`,
 						inline: true,
 					},
 					{
