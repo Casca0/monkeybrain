@@ -55,7 +55,7 @@ module.exports = {
 
 		if (interaction.isChatInputCommand()) {
 			try {
-				await command.execute(interaction);
+				await command.execute(interaction, profileData);
 			}
 			catch (e) {
 				console.error(e);
