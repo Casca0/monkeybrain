@@ -62,7 +62,7 @@ module.exports = {
 
 		case interaction.user.id:
 			macetaMessage.setTitle('Você se macetou, parabéns! :banana:');
-			macetaMessage.setDescription('');
+			macetaMessage.setDescription(`${user}`);
 
 			profileData.maceta_counter += 1;
 			profileData.save();
