@@ -81,6 +81,10 @@ module.exports = {
 			profileData.coins += 600;
 			profileData.save();
 
+			if (userData.coins > 600) {
+				userData.coins -= 600;
+			}
+
 			userData.maceta_counter += 1;
 			userData.save();
 

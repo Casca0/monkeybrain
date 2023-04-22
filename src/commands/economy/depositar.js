@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, inlineCode } = require('discord.js');
+const { userModel } = require('../../database/models/UserData.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -11,7 +12,7 @@ module.exports = {
 				.setRequired(true),
 		)
 		.setDMPermission(false),
-	execute(interaction, profileData) {
+	async execute(interaction, profileData) {
 		let quantity = interaction.options.getString('quantia');
 
 		if (quantity == 'tudo') quantity = profileData.coins;
@@ -20,15 +21,18 @@ module.exports = {
 
 		if (quantity > profileData.coins) return interaction.followUp('Você não tem essa quantia de moedas!');
 
-		if (isFinite(quantity)) {
-			profileData.coins -= parseInt(quantity);
-			profileData.bank += parseInt(quantity);
-			profileData.save();
+		await userModel.findOneAndUpdate(
+			{
+				user_id: interaction.user.id,
+			},
+			{
+				$inc: {
+					coins: -quantity,
+					bank: quantity,
+				},
+			},
+		);
 
-			return interaction.followUp(`Você depositou :coin: ${inlineCode(quantity)} Bananinhas Reais no seu banco!`);
-		}
-		else {
-			return interaction.followUp('Informe um valor válido!');
-		}
+		return interaction.followUp(`Você depositou :coin:${inlineCode(quantity)} Bananinhas Reais no seu banco!`);
 	},
 };
