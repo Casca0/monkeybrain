@@ -20,10 +20,15 @@ module.exports = {
 
 		if (quantity > profileData.bank) return interaction.followUp('Você não tem essa quantia de moedas!');
 
-		profileData.coins += quantity;
-		profileData.bank -= quantity;
-		profileData.save();
+		if (isFinite(quantity)) {
+			profileData.coins += parseInt(quantity);
+			profileData.bank -= parseInt(quantity);
+			profileData.save();
 
-		return interaction.followUp(`Você retirou :coin: ${inlineCode(quantity)} Bananinhas Reais do seu banco!`);
+			return interaction.followUp(`Você retirou :coin: ${inlineCode(quantity)} Bananinhas Reais do seu banco!`);
+		}
+		else {
+			return interaction.followUp('Informe um valor válido!');
+		}
 	},
 };
