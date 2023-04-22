@@ -49,7 +49,7 @@ module.exports = {
 
 		if (command == 'ver') {
 
-			const walletColor = parseInt(profileData.wallet_color.replace(/^#/, ''), 16);
+			const walletColor = parseInt(profileData.wallet_color.replace(/^#/, '0x'));
 
 			const adverts = profileData.adverts;
 

@@ -13,7 +13,7 @@ module.exports = {
 
 		const adverts = userData.adverts;
 
-		const walletColor = parseInt(userData.wallet_color.replace(/^#/, ''), 16);
+		const walletColor = parseInt(userData.wallet_color.replace(/^#/, '0x'));
 
 		const walletEmbed = new EmbedBuilder({
 			title: `${userData.wallet_name}`,
