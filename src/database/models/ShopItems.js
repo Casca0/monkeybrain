@@ -5,7 +5,7 @@ module.exports = {
 		{
 			'name': 'banana',
 			'itemID': 1,
-			'cost': 10000,
+			'cost': 1000,
 			'useDescription': 'Use este item para jogar uma banana em alguém.',
 			'use': async (interaction) => {
 				await interaction.guild.members.fetch();

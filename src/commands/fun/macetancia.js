@@ -18,18 +18,19 @@ module.exports = {
 		// If user doesn't have profileData, create it
 
 		let userData;
-		try {
-			userData = await userModel.findOne({ user_id: user.id });
-			if (!userData) {
-				await userModel.create({
-					user_id: user.id,
-				}).then(res => userData = res);
+		if (!user.bot) {
+			try {
+				userData = await userModel.findOne({ user_id: user.id });
+				if (!userData) {
+					await userModel.create({
+						user_id: user.id,
+					}).then(res => userData = res);
+				}
+			}
+			catch (err) {
+				console.error(err);
 			}
 		}
-		catch (err) {
-			console.error(err);
-		}
-
 		// Get random gif from JSON
 
 		const macetaGif = macetaVisions[Math.round(Math.random() * (macetaVisions.length - 1))];
@@ -54,6 +55,11 @@ module.exports = {
 			},
 		});
 
+		// Generate random number for bank withdraw
+
+		const bankMaceta = Math.floor(Math.random() * 250) + 1;
+		const macetaBankAmount = bananinhasAmount + 1000 * 2;
+
 		// Switch
 
 		switch (user.id) {
@@ -75,14 +81,14 @@ module.exports = {
 
 		case '380198082811396097':
 			macetaMessage.setTitle('Você macetou o ADM');
-			macetaMessage.setDescription('E ganhou 600 Bananinhas Reais :coin::banana: por isso!');
+			macetaMessage.setDescription(`E ganhou ${bananinhasAmount} Bananinhas Reais :coin::banana: por isso!`);
 			macetaMessage.setImage('https://media1.tenor.com/images/1d78b613692b7cfe01c2f2a4a0b2f6fc/tenor.gif?itemid=5072717');
 
-			profileData.coins += 600;
+			profileData.coins += bananinhasAmount;
 			profileData.save();
 
-			if (userData.coins > 600) {
-				userData.coins -= 600;
+			if (userData.coins > bananinhasAmount) {
+				userData.coins -= bananinhasAmount;
 			}
 
 			userData.maceta_counter += 1;
@@ -106,10 +112,23 @@ module.exports = {
 
 			break;
 		default:
-			if (user.bot == true) {
+			if (user.bot) {
 				macetaMessage.setTitle('MACETOU UM BOT');
 				macetaMessage.setDescription(`TCHU TCHU | ${user}`);
 				macetaMessage.setImage('https://c.tenor.com/ebTWNO6KmNYAAAAC/picapau-puchapenas.gif');
+
+				return interaction.followUp({ embeds: [macetaMessage] });
+			}
+			else if (bankMaceta === 20 && macetaBankAmount < userData.bank) {
+				macetaMessage.setTitle('VOCÊ MACETOU ESTE USER TÃO FORTE QUE TIROU DINHEIRO DO BANCO DELE');
+				macetaMessage.setDescription(`Você tirou :coin: BR ${macetaBankAmount} do banco de ${user}`);
+
+				profileData.coins += macetaBankAmount;
+				profileData.save();
+
+				userData.maceta_counter += 1;
+				userData.bank -= macetaBankAmount;
+				userData.save();
 
 				return interaction.followUp({ embeds: [macetaMessage] });
 			}
