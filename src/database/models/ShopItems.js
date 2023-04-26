@@ -16,7 +16,7 @@ module.exports = {
 
 				if (!userData) return interaction.followUp('Você jogou uma banana e errou!');
 
-				const itemValidation = userData.inventory.find(it => it.item_name == 'banana');
+				const itemValidation = userData.inventory.find(it => it.item_name === 'banana');
 
 				if (!itemValidation) {
 					userData.inventory.push({

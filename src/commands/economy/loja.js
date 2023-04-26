@@ -60,9 +60,9 @@ module.exports = {
 	async execute(interaction, profileData) {
 		const command = interaction.options.getSubcommand();
 
-		if (command == 'info') {
+		if (command === 'info') {
 			const itemId = interaction.options.getInteger('id');
-			const item = shop.find(items => items.itemID == itemId);
+			const item = shop.find(items => items.itemID === itemId);
 
 			if (!item) return interaction.followUp('Informe um item válido!');
 
@@ -91,17 +91,17 @@ module.exports = {
 			return interaction.followUp({ embeds: [infoCard] });
 		}
 
-		if (command == 'comprar') {
+		if (command === 'comprar') {
 			const itemId = interaction.options.getInteger('id');
 			const itemQuantity = interaction.options.getInteger('quantidade');
 
-			const item = shop.find(items => items.itemID == itemId);
+			const item = shop.find(items => items.itemID === itemId);
 
 			if (!item) return await interaction.followUp('Informe um item válido!');
 
 			const itemCost = item.cost * itemQuantity;
 
-			const getItemInInventory = profileData.inventory.find(it => it.item_name == item.name);
+			const getItemInInventory = profileData.inventory.find(it => it.item_name === item.name);
 
 			const transactionReceipt = new EmbedBuilder({
 				title: 'Recibo',
@@ -157,11 +157,11 @@ module.exports = {
 			}
 		}
 
-		if (command == 'vender') {
+		if (command === 'vender') {
 			const itemId = interaction.options.getInteger('id');
 			const itemQuantity = interaction.options.getInteger('quantidade');
 
-			const item = shop.find(items => items.itemID == itemId);
+			const item = shop.find(items => items.itemID === itemId);
 
 			if (!item) return interaction.followUp('Informe um item válido!');
 
@@ -173,8 +173,8 @@ module.exports = {
 
 			if (itemQuantity > getItemInInventory.amount) return interaction.followUp('Você não possui essa quantia deste item!');
 
-			if (getItemInInventory.amount == 1 || getItemInInventory.amount - itemQuantity <= 0) {
-				const index = profileData.inventory.findIndex(it => it.item_name == item.name);
+			if (getItemInInventory.amount === 1 || getItemInInventory.amount - itemQuantity <= 0) {
+				const index = profileData.inventory.findIndex(it => it.item_name === item.name);
 				profileData.inventory.splice(index, 1);
 			}
 			else {
@@ -209,7 +209,7 @@ module.exports = {
 			return interaction.followUp({ embeds: [transactionReceipt] });
 		}
 
-		if (command == 'mostrar') {
+		if (command === 'mostrar') {
 			try {
 				const backButtonId = 'back';
 				const forwardButtonId = 'forward';

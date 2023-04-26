@@ -15,7 +15,7 @@ module.exports = {
 	async execute(interaction, profileData) {
 		let quantity = interaction.options.getString('quantia');
 
-		if (quantity == 'tudo') quantity = profileData.bank;
+		if (quantity === 'tudo') quantity = profileData.bank;
 
 		if (quantity % 1 != 0 || quantity <= 0) return interaction.followUp('Informe um número inteiro!');
 

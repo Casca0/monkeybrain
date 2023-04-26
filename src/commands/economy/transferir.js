@@ -25,7 +25,7 @@ module.exports = {
 
 		const userWallet = await userModel.findOne({ user_id: user.id });
 
-		if (quantity == 'tudo') quantity = profileData.coins;
+		if (quantity === 'tudo') quantity = profileData.coins;
 
 		if (quantity % 1 != 0 || quantity <= 0) return interaction.followUp('Informe um número inteiro!');
 

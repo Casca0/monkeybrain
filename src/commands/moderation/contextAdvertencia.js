@@ -9,9 +9,11 @@ module.exports = {
 	async execute(interaction) {
 		const userData = await userModel.findOne({ user_id: interaction.targetUser.id });
 
-		if (!userData) return interaction.followUp('Este user não possui uma carteira!');
+		if (!userData) return interaction.followUp('Este user não possui uma carteira.');
 
 		const adverts = userData.adverts;
+
+		if (!adverts.length) return interaction.followUp('Este user não tem advertências.');
 
 		const advertsEmbed = new EmbedBuilder({
 			title: 'Advertências',
