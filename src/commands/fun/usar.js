@@ -13,18 +13,18 @@ module.exports = {
 	execute(interaction, profileData) {
 		const itemID = interaction.options.getInteger('id');
 
-		const item = shop.find(items => items.itemID === itemID);
+		const item = shop.find(items => items.itemID == itemID);
 
 		if (!item) return interaction.followUp('Informe um item válido!');
 
 		item.use(interaction);
 
-		const getItemInInventory = profileData.inventory.find(it => it.item_name === item.name);
+		const getItemInInventory = profileData.inventory.find(it => it.item_name == item.name);
 
 		if (!getItemInInventory) return interaction.followUp('Você não tem este item no inventário.');
 
-		if (getItemInInventory.amount === 1) {
-			const index = profileData.inventory.findIndex(it => it.item_name === item.name);
+		if (getItemInInventory.amount == 1) {
+			const index = profileData.inventory.findIndex(it => it.item_name == item.name);
 			profileData.inventory.splice(index, 1);
 		}
 		else {

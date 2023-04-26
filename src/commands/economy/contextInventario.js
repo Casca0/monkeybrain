@@ -11,7 +11,7 @@ module.exports = {
 
 		const userInventory = userData.inventory;
 
-		if (!userInventory.length) return interaction.followUp(`${interaction.targetUser} não possui nenhum item!`);
+		if (!userInventory || userInventory.length == 0) return interaction.followUp(`${interaction.targetUser} não possui nenhum item!`);
 
 		const inventoryCard = new EmbedBuilder({
 			title: 'Inventário',

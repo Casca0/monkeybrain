@@ -15,7 +15,7 @@ module.exports = {
 	async execute(interaction, profileData) {
 		let quantity = interaction.options.getString('quantia');
 
-		if (quantity === 'tudo') quantity = profileData.coins;
+		if (quantity == 'tudo') quantity = profileData.coins;
 
 		if (quantity % 1 != 0 || quantity <= 0) return interaction.followUp('O depósito tem que ser um número inteiro!');
 

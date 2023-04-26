@@ -47,7 +47,7 @@ module.exports = {
 
 		const command = interaction.options.getSubcommand();
 
-		if (command === 'ver') {
+		if (command == 'ver') {
 
 			const walletColor = parseInt(profileData.wallet_color.replace(/^#/, '0x'));
 
@@ -87,7 +87,7 @@ module.exports = {
 			return interaction.followUp({ embeds: [walletEmbed] });
 		}
 
-		if (command === 'nome') {
+		if (command == 'nome') {
 			const newName = interaction.options.getString('nome');
 
 			profileData.wallet_name = newName;
@@ -96,7 +96,7 @@ module.exports = {
 			return interaction.followUp(`O nome da sua carteira foi alterado para : ${inlineCode(newName)}`);
 		}
 
-		if (command === 'imagem') {
+		if (command == 'imagem') {
 			const newImage = interaction.options.getString('url');
 			const urlRegex = /^(https?|ftp):\/\/[^ "]+$/;
 			const urlTest = urlRegex.test(newImage);
@@ -119,7 +119,7 @@ module.exports = {
 			return interaction.followUp({ embeds: [imageCard], ephemeral: true });
 		}
 
-		if (command === 'cor') {
+		if (command == 'cor') {
 			const newColor = interaction.options.getString('cor');
 			const regexForColor = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i;
 			const testColor = regexForColor.test(newColor);

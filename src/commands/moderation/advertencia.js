@@ -38,7 +38,7 @@ module.exports = {
 
 		const record = await userModel.findOne({ user_id: user.id });
 
-		if (command === 'criar') {
+		if (command == 'criar') {
 			const reason = interaction.options.getString('motivo') || 'Sem motivo';
 
 			record.adverts.push({
@@ -49,7 +49,7 @@ module.exports = {
 
 			const adverts = record.adverts;
 
-			if (adverts.length === 10) {
+			if (adverts.length == 10) {
 				await resolvedUser.kick('Execesso de advertências.');
 			}
 
@@ -107,14 +107,14 @@ module.exports = {
 			return interaction.followUp({ embeds: [advertMessage] });
 		}
 
-		if (command === 'limpar') {
+		if (command == 'limpar') {
 			if (resolvedUser.isCommunicationDisabled()) {
 				await resolvedUser.disableCommunicationUntil(null);
 			}
 
 			const advertsLength = record.adverts.length;
 
-			if (advertsLength === 0) {
+			if (advertsLength == 0) {
 				return interaction.followUp('Este user não tem advertências.');
 			}
 

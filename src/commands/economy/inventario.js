@@ -8,7 +8,7 @@ module.exports = {
 	async execute(interaction, profileData) {
 		const userInventory = profileData.inventory;
 
-		if (!userInventory.length) return interaction.followUp('Você não possui nenhum item!');
+		if (!userInventory || userInventory.length == 0) return interaction.followUp('Você não possui nenhum item!');
 
 		const inventoryCard = new EmbedBuilder({
 			title: 'Inventário',
