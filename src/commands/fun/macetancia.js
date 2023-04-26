@@ -37,7 +37,7 @@ module.exports = {
 
 		// Generate coins amount
 
-		const bananinhasAmount = Math.floor(Math.random() * 450) + 1;
+		let bananinhasAmount = Math.floor(Math.random() * 450) + 1;
 
 		// Create embed message
 
@@ -58,7 +58,7 @@ module.exports = {
 		// Generate random number for bank withdraw
 
 		const bankMaceta = Math.floor(Math.random() * 250) + 1;
-		const macetaBankAmount = bananinhasAmount + 1000 * 2;
+		let macetaBankAmount = bananinhasAmount + 1000 * 2;
 
 		// Switch
 
@@ -119,15 +119,32 @@ module.exports = {
 
 				return interaction.followUp({ embeds: [macetaMessage] });
 			}
-			else if (bankMaceta === 20 && macetaBankAmount < userData.bank) {
+			else if (bankMaceta === 20 && userData.bank >= 0) {
 				macetaMessage.setTitle('VOCÊ MACETOU ESTE USER TÃO FORTE QUE TIROU DINHEIRO DO BANCO DELE');
 				macetaMessage.setDescription(`Você tirou :coin: BR ${macetaBankAmount} do banco de ${user}`);
+				macetaMessage.setImage('https://media.tenor.com/tEMIpAruG6sAAAAd/mucalol.gif');
+
+				if (userData.bank === 0) {
+					if (userData.coins < macetaBankAmount) {
+						userData.coins -= macetaBankAmount;
+					}
+					else {
+						macetaBankAmount = userData.coins;
+						userData.coins -= macetaBankAmount;
+					}
+				}
+				else if (userData.bank < macetaBankAmount) {
+					macetaBankAmount = userData.bank;
+					userData.bank -= macetaBankAmount;
+				}
+				else {
+					userData.bank -= macetaBankAmount;
+				}
 
 				profileData.coins += macetaBankAmount;
 				profileData.save();
 
 				userData.maceta_counter += 1;
-				userData.bank -= macetaBankAmount;
 				userData.save();
 
 				return interaction.followUp({ embeds: [macetaMessage] });
@@ -136,11 +153,12 @@ module.exports = {
 				profileData.coins += bananinhasAmount;
 				profileData.save();
 
-				if (bananinhasAmount < userData.coins) {
-					userData.coins -= bananinhasAmount;
+				if (bananinhasAmount > userData.coins) {
+					bananinhasAmount = userData.coins;
 				}
 
 				userData.maceta_counter += 1;
+				userData.coins -= bananinhasAmount;
 				userData.save();
 
 				return interaction.followUp({ embeds: [macetaMessage] });
