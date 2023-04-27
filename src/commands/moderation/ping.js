@@ -27,10 +27,9 @@ module.exports = {
 
 		const usersData = await userModel.find({});
 
-		const rankingData = usersData.sort((a, b) => b.maceta_counter - a.maceta_counter)
-			.filter((user) => !interaction.guild.members.cache.find(member => member.id == user.user_id));
+		const rankingData = usersData.filter((user) => !interaction.guild.members.cache.find(member => member.id == user.user_id));
 
-		console.log(rankingData);
+		rankingData.forEach(async (user, index) => await user.deleteOne().then(console.log(`Deletado ${index}`)));
 		return interaction.followUp('POING!');
 	},
 };
