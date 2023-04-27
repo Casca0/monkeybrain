@@ -1,5 +1,5 @@
 {
-	"name": "monkeybrain2.0",
+	"name": "monkeybrain",
 	"version": "1.0.0",
 	"description": "Monkey brain but better",
 	"main": "src/index.js",
@@ -9,14 +9,14 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/Casca0/monkeybrain2.0.git"
+		"url": "git+https://github.com/Casca0/monkeybrain.git"
 	},
 	"author": "Cascão",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/Casca0/monkeybrain2.0/issues"
+		"url": "https://github.com/Casca0/monkeybrain/issues"
 	},
-	"homepage": "https://github.com/Casca0/monkeybrain2.0#readme",
+	"homepage": "https://github.com/Casca0/monkeybrain#readme",
 	"dependencies": {
 		"discord.js": "^14.9.0",
 		"dotenv": "^16.0.3",
