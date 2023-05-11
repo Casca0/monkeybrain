@@ -118,7 +118,7 @@ module.exports = {
 				return interaction.followUp('Este user não tem advertências.');
 			}
 
-			record.adverts.length = 0;
+			record.adverts.splice(0, advertsLength);
 
 			record.save();
 

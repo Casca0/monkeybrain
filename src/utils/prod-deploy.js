@@ -3,8 +3,7 @@ const { REST, Routes } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
 
-const clientId = process.env.CLIENT_ID;
-const token = process.env['DISCORD_TOKEN'];
+const { DISCORD_TOKEN, CLIENT_ID } = process.env;
 
 const commands = [];
 
@@ -20,15 +19,11 @@ for (const folder of commandsFolders) {
 	}
 }
 
-const rest = new REST({ version: 10 }).setToken(token);
+const rest = new REST({ version: 10 }).setToken(DISCORD_TOKEN);
 
 rest.put(
-	Routes.applicationCommands(clientId),
+	Routes.applicationCommands(CLIENT_ID),
 	{ body: commands },
 )
-	.then(() => console.log(`Comandos registrados em produção : ${commands.length}`))
+	.then(() => console.log(`Comandos registrados : ${commands.length}`))
 	.catch(console.error);
-
-// rest.put(Routes.applicationCommands(clientId), { body: [] })
-// 	.then(() => console.log('Comanddos registrados em produção deletados!'))
-// 	.catch(console.error);

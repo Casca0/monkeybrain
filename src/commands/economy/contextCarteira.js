@@ -4,7 +4,7 @@ const { userModel } = require('../../database/models/UserData.js');
 
 module.exports = {
 	data: new ContextMenuCommandBuilder()
-		.setName('vercarteira')
+		.setName('Ver carteira')
 		.setType(ApplicationCommandType.User),
 	async execute(interaction) {
 		const userData = await userModel.findOne({ user_id: interaction.targetUser.id });

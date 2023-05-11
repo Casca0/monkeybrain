@@ -4,6 +4,7 @@
 	"description": "Monkey brain but better",
 	"main": "src/index.js",
 	"scripts": {
+		"delete": "node src/utils/delete-commands.js",
 		"prestart": "node src/utils/prod-deploy.js",
 		"start": "node ."
 	},
@@ -18,12 +19,12 @@
 	},
 	"homepage": "https://github.com/Casca0/monkeybrain#readme",
 	"dependencies": {
-		"discord.js": "^14.10.0",
+		"discord.js": "^14.11.0",
 		"dotenv": "^16.0.3",
 		"express": "^4.18.2",
-		"mongoose": "^7.0.3"
+		"mongoose": "^7.1.1"
 	},
 	"devDependencies": {
-		"eslint": "^8.38.0"
+		"eslint": "^8.40.0"
 	}
 }

@@ -18,7 +18,7 @@ module.exports = {
 		switch (true) {
 		case (randomNumber <= 20):
 			begEmbed.setTitle('Pedindo dinheiro,\nvocê tropeça e senta num mendigo!');
-			begEmbed.setDescription('Ele acaba pegando algumas moedas suas. :coin: -100 Bananinhas Reais');
+			begEmbed.setDescription('Ele acaba pegando algumas moedas suas.\n:coin: -100 Bananinhas Reais');
 			begEmbed.setImage('https://media.tenor.com/WErxJdvQO04AAAAM/mucalol-smurfdomuca.gif');
 
 			if (profileData.coins < 100) {
