@@ -10,7 +10,7 @@ const {
 } = require('discord.js');
 const mongoose = require('mongoose');
 
-const token = process.env['DISCORD_TOKEN'];
+const { DISCORD_TOKEN, MONGO_TOKEN } = process.env;
 
 const client = new Client({
 	intents: [
@@ -86,7 +86,7 @@ app.listen(port, () => {
 
 // Database
 
-mongoose.connect(process.env.MONGO_TOKEN, {
+mongoose.connect(MONGO_TOKEN, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 }).then(() => {
@@ -95,4 +95,4 @@ mongoose.connect(process.env.MONGO_TOKEN, {
 	console.log(err);
 });
 
-client.login(token);
+client.login(DISCORD_TOKEN);
