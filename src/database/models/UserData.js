@@ -35,6 +35,10 @@ const UserData = new Schema({
 		default: 0,
 		min: 0,
 	},
+	maceta_multiplier: {
+		type: Number,
+		default: 1.0,
+	},
 	wallet_name: {
 		type: String,
 		default: 'Carteira',

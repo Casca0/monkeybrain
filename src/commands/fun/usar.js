@@ -17,7 +17,7 @@ module.exports = {
 
 		if (!item) return interaction.followUp('Informe um item válido!');
 
-		item.use(interaction);
+		item.use(interaction, profileData);
 
 		const getItemInInventory = profileData.inventory.find(it => it.item_name == item.name);
 

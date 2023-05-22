@@ -66,20 +66,24 @@ module.exports = {
 					{
 						name: 'Carteira',
 						value: `:dollar: BR ${profileData.coins}`,
-					},
-					{
-						name: 'Banco',
-						value: `:coin: BR ${profileData.bank}`,
-					},
-					{
-						name: 'Macetadas',
-						value: `:monkey: ${profileData.maceta_counter}`,
 						inline: true,
 					},
 					{
 						name: 'Advertências',
 						value: `:warning: ${adverts.length}`,
 						inline: true,
+					},
+					{
+						name: 'Banco',
+						value: `:coin: BR ${profileData.bank}`,
+					},
+					{
+						name: 'Multiplicador',
+						value: `:chart_with_upwards_trend: ${profileData.maceta_multiplier}x`,
+					},
+					{
+						name: 'Macetadas',
+						value: `:monkey: ${profileData.maceta_counter}`,
 					},
 				],
 			});

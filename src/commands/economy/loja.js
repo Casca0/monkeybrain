@@ -236,7 +236,7 @@ module.exports = {
 					const currentPage = shop.slice(start, start + 5);
 
 					return new EmbedBuilder({
-						title: 'Loja do Negão!',
+						title: 'Loja do Negão',
 						color: 0xfcba03,
 						image: {
 							url: 'https://media.tenor.com/h_j-gA2isIcAAAAC/residentevil-merchant.gif',

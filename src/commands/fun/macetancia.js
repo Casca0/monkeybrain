@@ -37,7 +37,7 @@ module.exports = {
 
 		// Generate coins amount
 
-		let bananinhasAmount = Math.floor(Math.random() * 450) + 1;
+		let bananinhasAmount = Math.round((Math.floor(Math.random() * 450) + 1) * profileData.maceta_multiplier);
 
 		// Create embed message
 

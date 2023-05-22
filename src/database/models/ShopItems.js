@@ -1,4 +1,5 @@
 const { userModel } = require('./UserData.js');
+const { inlineCode } = require('discord.js');
 
 module.exports = {
 	items: [
@@ -34,6 +35,17 @@ module.exports = {
 				userData.save();
 
 				return interaction.followUp(`Você jogou uma banana no(a) ${user}!`);
+			},
+		},
+		{
+			'name': 'banana abençoada',
+			'itemID': 2,
+			'cost': 30000,
+			'useDescription': 'Use este item para aumentar seu multiplicador de bananinhas!',
+			'use': (interaction, profileData) => {
+				profileData.maceta_multiplier += 0.2;
+
+				return interaction.followUp(`Seu multiplicador: ${inlineCode(profileData.maceta_multiplier)} :chart_with_upwards_trend:`);
 			},
 		},
 	],
