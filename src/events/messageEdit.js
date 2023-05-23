@@ -2,47 +2,47 @@ const { Events, EmbedBuilder, inlineCode } = require('discord.js');
 
 module.exports = {
 	name: Events.MessageUpdate,
-	execute(message) {
-		if (!message.guild) return;
+	execute(oldMessage, newMessage) {
+		if (!oldMessage.guild) return;
 
-		if (message.author.bot) return;
+		if (oldMessage.author.bot) return;
 
-		const logChannel = message.guild.publicUpdatesChannel;
+		const logChannel = oldMessage.guild.publicUpdatesChannel;
 
-		const newMessageContent = message.reactions.message.content;
-		const oldMessageContent = message.content;
+		const newMessageContent = newMessage.content;
+		const oldMessageContent = oldMessage.content;
 
 		const editEmbed = new EmbedBuilder({
-			color: 0x49fc03,
+			color: 0xfa2550,
 			title: 'Mensagem editada',
 			thumbnail: {
-				url: message.author.avatarURL(),
+				url: oldMessage.author.avatarURL(),
 			},
 			fields: [
 				{
 					name: 'Conteúdo antes da alteração',
-					value: message.attachments.first() ? `Imagem | ${inlineCode(oldMessageContent)}` : inlineCode(oldMessageContent),
+					value: oldMessage.attachments.first() ? `Imagem | ${inlineCode(oldMessageContent)}` : inlineCode(oldMessageContent),
 				},
 				{
 					name: 'Conteúdo depois da alteração',
-					value: message.attachments.first() ? `Imagem | ${inlineCode(newMessageContent)}` : inlineCode(newMessageContent),
+					value: newMessage.attachments.first() ? `Imagem | ${inlineCode(newMessageContent)}` : inlineCode(newMessageContent),
 				},
 				{
 					name: 'Autor da mensagem',
-					value: message.author.tag,
+					value: oldMessage.author.tag,
 				},
 				{
 					name: 'Canal da mensagem',
-					value: `<#${message.channelId}>`,
+					value: `<#${oldMessage.channelId}>`,
 				},
 				{
 					name: 'Link da mensagem',
-					value: `[link](${message.url})`,
+					value: `[link](${oldMessage.url})`,
 				},
 			],
 			timestamp: new Date().toISOString(),
 			image: {
-				url: message.attachments.first() ? message.attachments.first().url : '',
+				url: oldMessage.attachments.first() ? oldMessage.attachments.first().url : '',
 			},
 		});
 
