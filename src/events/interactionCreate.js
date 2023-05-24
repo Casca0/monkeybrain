@@ -10,32 +10,6 @@ module.exports = {
 
 		await interaction.deferReply();
 
-		// Command cooldown
-
-		if (!cooldowns.has(command.data.name)) {
-			cooldowns.set(command.data.name, new Collection());
-		}
-
-		const timestamps = cooldowns.get(command.data.name);
-
-		const cooldownAmount = command.cooldown || 3;
-
-		const now = Date.now();
-
-		if (timestamps.has(interaction.user.id)) {
-			const expirationTime = timestamps.get(interaction.user.id) + cooldownAmount * 1000;
-
-			if (now < expirationTime) {
-				const timeLeftUnix = (expirationTime / 1000).toFixed(0);
-
-				return interaction.followUp(`Você pode usar o comando ${inlineCode(command.data.name)} <t:${timeLeftUnix}:R>.`);
-			}
-		}
-
-		timestamps.set(interaction.user.id, now);
-
-		setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount * 1000);
-
 		// Database
 
 		let profileData;
@@ -49,6 +23,42 @@ module.exports = {
 		}
 		catch (err) {
 			console.error(err);
+		}
+
+		// Command cooldown
+
+		if (!cooldowns.has(command.data.name)) {
+			cooldowns.set(command.data.name, new Collection());
+		}
+
+		const timestamps = cooldowns.get(command.data.name);
+
+		if (profileData.maceta_starPower) {
+			timestamps.delete(interaction.user.id);
+			setTimeout(() => {
+				profileData.maceta_starPower = false;
+				profileData.save();
+				return;
+			}, 10000);
+		}
+		else {
+			const cooldownAmount = command.cooldown || 3;
+
+			const now = Date.now();
+
+			if (timestamps.has(interaction.user.id)) {
+				const expirationTime = timestamps.get(interaction.user.id) + cooldownAmount * 1000;
+
+				if (now < expirationTime) {
+					const timeLeftUnix = (expirationTime / 1000).toFixed(0);
+
+					return interaction.followUp(`Você pode usar o comando ${inlineCode(command.data.name)} <t:${timeLeftUnix}:R>.`);
+				}
+			}
+
+			timestamps.set(interaction.user.id, now);
+
+			setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount * 1000);
 		}
 
 		// Executing command

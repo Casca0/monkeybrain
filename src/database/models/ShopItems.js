@@ -48,5 +48,16 @@ module.exports = {
 				return interaction.followUp(`Seu multiplicador: ${inlineCode(profileData.maceta_multiplier)} :chart_with_upwards_trend:`);
 			},
 		},
+		{
+			'name': 'fruta estrela',
+			'itemID': 3,
+			'cost': 15000,
+			'useDescription': 'Use este item para poder macetar sem pausas por 10 segundos!',
+			'use': (interaction, profileData) => {
+				profileData.maceta_starPower = true;
+
+				return interaction.followUp('FRUTA ESTRELA ATIVADA!');
+			},
+		},
 	],
 };

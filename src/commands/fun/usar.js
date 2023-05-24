@@ -17,11 +17,11 @@ module.exports = {
 
 		if (!item) return interaction.followUp('Informe um item válido!');
 
-		item.use(interaction, profileData);
-
 		const getItemInInventory = profileData.inventory.find(it => it.item_name == item.name);
 
 		if (!getItemInInventory) return interaction.followUp('Você não tem este item no inventário.');
+
+		item.use(interaction, profileData);
 
 		if (getItemInInventory.amount == 1) {
 			const index = profileData.inventory.findIndex(it => it.item_name == item.name);

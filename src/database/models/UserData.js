@@ -39,6 +39,10 @@ const UserData = new Schema({
 		type: Number,
 		default: 1.0,
 	},
+	maceta_starPower: {
+		type: Boolean,
+		default: false,
+	},
 	wallet_name: {
 		type: String,
 		default: 'Carteira',
