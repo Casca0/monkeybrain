@@ -29,7 +29,7 @@ module.exports = {
 			}
 			profileData.save();
 
-			return interaction.followUp({ embeds: [begEmbed] });
+			return interaction.reply({ embeds: [begEmbed] });
 
 		case (randomNumber <= 40):
 			begEmbed.setTitle('Pedindo dinheiro,\nvocê recebe um lanche de terra e algumas bananinhas!');
@@ -39,7 +39,7 @@ module.exports = {
 			profileData.coins += 150;
 			profileData.save();
 
-			return interaction.followUp({ embeds: [begEmbed] });
+			return interaction.reply({ embeds: [begEmbed] });
 
 		case (randomNumber <= 50):
 			begEmbed.setTitle('Um rosto familiar te dá algumas moedas\ne você escuta um resmungo atrás do seu sorriso\n"Pobre asqueroso"');
@@ -49,7 +49,7 @@ module.exports = {
 			profileData.coins += 200;
 			profileData.save();
 
-			return interaction.followUp({ embeds: [begEmbed] });
+			return interaction.reply({ embeds: [begEmbed] });
 		}
 	},
 };

@@ -64,7 +64,7 @@ module.exports = {
 			const itemId = interaction.options.getInteger('id');
 			const item = shop.find(items => items.itemID == itemId);
 
-			if (!item) return interaction.followUp('Informe um item válido!');
+			if (!item) return interaction.reply('Informe um item válido!');
 
 			const itemUseDescription = item.useDescription || 'Não possui uso.';
 
@@ -88,7 +88,7 @@ module.exports = {
 				timestamp: new Date().toISOString(),
 			});
 
-			return interaction.followUp({ embeds: [infoCard] });
+			return interaction.reply({ embeds: [infoCard] });
 		}
 
 		if (command == 'comprar') {
@@ -97,7 +97,7 @@ module.exports = {
 
 			const item = shop.find(items => items.itemID == itemId);
 
-			if (!item) return await interaction.followUp('Informe um item válido!');
+			if (!item) return await interaction.reply('Informe um item válido!');
 
 			const itemCost = item.cost * itemQuantity;
 
@@ -132,7 +132,7 @@ module.exports = {
 			});
 
 			if (itemCost > profileData.coins) {
-				return await interaction.followUp('Você não tem moedas suficientes para comprar este item!');
+				return await interaction.reply('Você não tem moedas suficientes para comprar este item!');
 			}
 
 			if (getItemInInventory) {
@@ -141,7 +141,7 @@ module.exports = {
 				profileData.coins -= itemCost;
 				profileData.save();
 
-				return interaction.followUp({ embeds: [transactionReceipt] });
+				return interaction.reply({ embeds: [transactionReceipt] });
 			}
 			else {
 				profileData.inventory.push({
@@ -153,7 +153,7 @@ module.exports = {
 				profileData.coins -= itemCost;
 				profileData.save();
 
-				return interaction.followUp({ embeds: [transactionReceipt] });
+				return interaction.reply({ embeds: [transactionReceipt] });
 			}
 		}
 
@@ -163,15 +163,15 @@ module.exports = {
 
 			const item = shop.find(items => items.itemID == itemId);
 
-			if (!item) return interaction.followUp('Informe um item válido!');
+			if (!item) return interaction.reply('Informe um item válido!');
 
 			const sellCost = (item.cost * itemQuantity) * (75 / 100);
 
 			const getItemInInventory = profileData.inventory.find(it => it.item_name = item.name);
 
-			if (!getItemInInventory) return interaction.followUp('Você não possui este item!');
+			if (!getItemInInventory) return interaction.reply('Você não possui este item!');
 
-			if (itemQuantity > getItemInInventory.amount) return interaction.followUp('Você não possui essa quantia deste item!');
+			if (itemQuantity > getItemInInventory.amount) return interaction.reply('Você não possui essa quantia deste item!');
 
 			if (getItemInInventory.amount == 1 || getItemInInventory.amount - itemQuantity <= 0) {
 				const index = profileData.inventory.findIndex(it => it.item_name == item.name);
@@ -206,7 +206,7 @@ module.exports = {
 				timestamp: new Date().toISOString(),
 			});
 
-			return interaction.followUp({ embeds: [transactionReceipt] });
+			return interaction.reply({ embeds: [transactionReceipt] });
 		}
 
 		if (command == 'mostrar') {
@@ -253,7 +253,7 @@ module.exports = {
 
 				const canFitInOnePage = shop.length <= 5;
 
-				const interactionReply = await interaction.followUp({
+				const interactionReply = await interaction.reply({
 					embeds: [await generateShopEmbed(0)],
 					components: canFitInOnePage ? [] : [new ActionRowBuilder({
 						components: [forwardButton],
@@ -288,7 +288,7 @@ module.exports = {
 			}
 			catch (err) {
 				console.error(err);
-				return interaction.followUp('Ocorreu um erro ao gerar a loja!');
+				return interaction.reply('Ocorreu um erro ao gerar a loja!');
 			}
 		}
 	},

@@ -1,4 +1,4 @@
-const { ContextMenuCommandBuilder, ApplicationCommandType, EmbedBuilder } = require('discord.js');
+const { ContextMenuCommandBuilder, ApplicationCommandType, EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, ComponentType } = require('discord.js');
 
 const { userModel } = require('../../database/models/UserData.js');
 
@@ -9,11 +9,28 @@ module.exports = {
 	async execute(interaction) {
 		const userData = await userModel.findOne({ user_id: interaction.targetUser.id });
 
-		if (!userData) return interaction.followUp('Este user não possui uma carteira!');
+		if (!userData) return interaction.reply('Este user não possui uma carteira!');
 
 		const adverts = userData.adverts;
 
+		const userInventory = userData.inventory;
+
 		const walletColor = parseInt(userData.wallet_color.replace(/^#/, '0x'));
+
+		const walletButton = new ButtonBuilder({
+			style: ButtonStyle.Primary,
+			label: 'Carteira',
+			emoji: '💰',
+			customId: 'carteira',
+			disabled: true,
+		});
+
+		const inventoryButton = new ButtonBuilder({
+			style: ButtonStyle.Primary,
+			label: 'Inventário',
+			emoji: '🎒',
+			customId: 'inventario',
+		});
 
 		const walletEmbed = new EmbedBuilder({
 			title: `${userData.wallet_name}`,
@@ -48,6 +65,54 @@ module.exports = {
 			],
 		});
 
-		return interaction.followUp({ embeds: [walletEmbed] });
+		const inventoryEmbed = new EmbedBuilder({
+			title: 'Inventário',
+			color: walletColor,
+			thumbnail: {
+				url: interaction.targetUser.avatarURL({ dynamic: true }),
+			},
+		});
+
+		if (userInventory || userInventory.length > 0) {
+			inventoryEmbed.setFields(await Promise.all(
+				userInventory.map(async item => ({
+					name: item.item_name.charAt(0).toUpperCase() + item.item_name.slice(1),
+					value: `Quantia : \`${item.amount}\`\nID : \`${item.item_id}\``,
+				})),
+			));
+		}
+
+		const buttonRow = new ActionRowBuilder({
+			components: [walletButton, inventoryButton],
+		});
+
+		const interactionReply = await interaction.reply({
+			embeds: [walletEmbed],
+			components: [buttonRow],
+		});
+
+		const buttonCollector = await interactionReply.createMessageComponentCollector({
+			componentType: ComponentType.Button,
+			filter: i => i.user.id === interaction.user.id,
+		});
+
+		buttonCollector.on('collect', async i => {
+			if (i.customId == 'inventario') {
+				walletButton.setDisabled(false);
+				inventoryButton.setDisabled(true);
+				await i.update({
+					embeds: [inventoryEmbed],
+					components: [buttonRow],
+				});
+			}
+			else {
+				walletButton.setDisabled(true);
+				inventoryButton.setDisabled(false);
+				await i.update({
+					embeds: [walletEmbed],
+					components: [buttonRow],
+				});
+			}
+		});
 	},
 };

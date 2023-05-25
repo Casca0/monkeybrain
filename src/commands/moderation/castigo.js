@@ -47,14 +47,14 @@ module.exports = {
 		try {
 			if (resolvedUser.isCommunicationDisabled()) {
 				await resolvedUser.disableCommunicationUntil(null);
-				return interaction.followUp(`${user} foi solto da árvore do macaco.`);
+				return interaction.reply(`${user} foi solto da árvore do macaco.`);
 			}
 			await resolvedUser.disableCommunicationUntil(Date.now() + formattedTime, reason);
-			return interaction.followUp({ embeds: [timeoutMessage] });
+			return interaction.reply({ embeds: [timeoutMessage] });
 		}
 		catch (err) {
 			console.error(err);
-			return interaction.followUp('O user que você selecionou provavelmente não pode ser mutado!');
+			return interaction.reply('O user que você selecionou provavelmente não pode ser mutado!');
 		}
 	},
 };

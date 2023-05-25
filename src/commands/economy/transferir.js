@@ -27,9 +27,9 @@ module.exports = {
 
 		if (quantity == 'tudo') quantity = profileData.coins;
 
-		if (quantity % 1 != 0 || quantity <= 0) return interaction.followUp('Informe um número inteiro!');
+		if (quantity % 1 != 0 || quantity <= 0) return interaction.reply('Informe um número inteiro!');
 
-		if (quantity > profileData.coins) return interaction.followUp('Você não tem essa quantia de moedas!');
+		if (quantity > profileData.coins) return interaction.reply('Você não tem essa quantia de moedas!');
 
 		profileData.coins -= quantity;
 		userWallet.coins += quantity;
@@ -37,6 +37,6 @@ module.exports = {
 		profileData.save();
 		userWallet.save();
 
-		return interaction.followUp(`Você transferiu :coin: ${inlineCode(quantity)} Bananinhas Reais para ${user}!`);
+		return interaction.reply(`Você transferiu :coin: ${inlineCode(quantity)} Bananinhas Reais para ${user}!`);
 	},
 };

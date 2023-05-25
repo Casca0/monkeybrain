@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, inlineCode } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, inlineCode, ComponentType } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -7,7 +7,7 @@ module.exports = {
 		.setDMPermission(false)
 		.addSubcommand(subcommand =>
 			subcommand
-				.setName('ver')
+				.setName('mostrar')
 				.setDescription('Veja a sua carteira!'),
 		)
 		.addSubcommand(subcommand =>
@@ -47,11 +47,28 @@ module.exports = {
 
 		const command = interaction.options.getSubcommand();
 
-		if (command == 'ver') {
+		if (command == 'mostrar') {
 
 			const walletColor = parseInt(profileData.wallet_color.replace(/^#/, '0x'));
 
 			const adverts = profileData.adverts;
+
+			const userInventory = profileData.inventory;
+
+			const walletButton = new ButtonBuilder({
+				style: ButtonStyle.Primary,
+				label: 'Carteira',
+				emoji: '💰',
+				customId: 'carteira',
+				disabled: true,
+			});
+
+			const inventoryButton = new ButtonBuilder({
+				style: ButtonStyle.Primary,
+				label: 'Inventário',
+				emoji: '🎒',
+				customId: 'inventario',
+			});
 
 			const walletEmbed = new EmbedBuilder({
 				title: `${profileData.wallet_name}`,
@@ -88,7 +105,55 @@ module.exports = {
 				],
 			});
 
-			return interaction.followUp({ embeds: [walletEmbed] });
+			const inventoryEmbed = new EmbedBuilder({
+				title: 'Inventário',
+				color: walletColor,
+				thumbnail: {
+					url: interaction.user.avatarURL({ dynamic: true }),
+				},
+			});
+
+			if (userInventory || userInventory.length > 0) {
+				inventoryEmbed.setFields(await Promise.all(
+					userInventory.map(async item => ({
+						name: item.item_name.charAt(0).toUpperCase() + item.item_name.slice(1),
+						value: `Quantia : \`${item.amount}\`\nID : \`${item.item_id}\``,
+					})),
+				));
+			}
+
+			const buttonRow = new ActionRowBuilder({
+				components: [walletButton, inventoryButton],
+			});
+
+			const interactionReply = await interaction.reply({
+				embeds: [walletEmbed],
+				components: [buttonRow],
+			});
+
+			const buttonCollector = await interactionReply.createMessageComponentCollector({
+				componentType: ComponentType.Button,
+				filter: i => i.user.id === interaction.user.id,
+			});
+
+			buttonCollector.on('collect', async i => {
+				if (i.customId == 'inventario') {
+					walletButton.setDisabled(false);
+					inventoryButton.setDisabled(true);
+					await i.update({
+						embeds: [inventoryEmbed],
+						components: [buttonRow],
+					});
+				}
+				else {
+					walletButton.setDisabled(true);
+					inventoryButton.setDisabled(false);
+					await i.update({
+						embeds: [walletEmbed],
+						components: [buttonRow],
+					});
+				}
+			});
 		}
 
 		if (command == 'nome') {
@@ -97,7 +162,7 @@ module.exports = {
 			profileData.wallet_name = newName;
 			profileData.save();
 
-			return interaction.followUp(`O nome da sua carteira foi alterado para : ${inlineCode(newName)}`);
+			return interaction.reply(`O nome da sua carteira foi alterado para : ${inlineCode(newName)}`);
 		}
 
 		if (command == 'imagem') {
@@ -106,7 +171,7 @@ module.exports = {
 			const urlTest = urlRegex.test(newImage);
 
 			if (!urlTest) {
-				return interaction.followUp('Informe um link válido!');
+				return interaction.reply('Informe um link válido!');
 			}
 
 			profileData.wallet_image = newImage;
@@ -120,7 +185,7 @@ module.exports = {
 				},
 			});
 
-			return interaction.followUp({ embeds: [imageCard], ephemeral: true });
+			return interaction.reply({ embeds: [imageCard], ephemeral: true });
 		}
 
 		if (command == 'cor') {
@@ -129,13 +194,13 @@ module.exports = {
 			const testColor = regexForColor.test(newColor);
 
 			if (!testColor) {
-				return interaction.followUp('Informe um código HEX válido para uma cor!');
+				return interaction.reply('Informe um código HEX válido para uma cor!');
 			}
 
 			profileData.wallet_color = newColor;
 			profileData.save();
 
-			return interaction.followUp(`A cor da sua carteira foi alterada para : ${inlineCode(newColor)}`);
+			return interaction.reply(`A cor da sua carteira foi alterada para : ${inlineCode(newColor)}`);
 		}
 	},
 };

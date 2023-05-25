@@ -28,12 +28,12 @@ module.exports = {
 			userWallet.coins += quantity;
 			userWallet.save();
 
-			return interaction.followUp({ content: `Você deu :coin: ${inlineCode(quantity)} Bananinhas Reais para ${user}!`, ephemeral: true });
+			return interaction.reply({ content: `Você deu :coin: ${inlineCode(quantity)} Bananinhas Reais para ${user}!`, ephemeral: true });
 		}
 
 		profileData.coins += quantity;
 		profileData.save();
 
-		return interaction.followUp({ content: `Você deu para si :coin: ${inlineCode(quantity)} Bananinhas Reais!`, ephemeral: true });
+		return interaction.reply({ content: `Você deu para si :coin: ${inlineCode(quantity)} Bananinhas Reais!`, ephemeral: true });
 	},
 };

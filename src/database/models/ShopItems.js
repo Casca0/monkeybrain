@@ -15,7 +15,7 @@ module.exports = {
 
 				const userData = await userModel.findOne({ user_id: user.id });
 
-				if (!userData) return interaction.followUp('Você jogou uma banana e errou!');
+				if (!userData) return interaction.reply('Você jogou uma banana e errou!');
 
 				const itemValidation = userData.inventory.find(it => it.item_name == 'banana');
 
@@ -28,13 +28,13 @@ module.exports = {
 
 					userData.save();
 
-					return interaction.followUp(`Você jogou uma banana no(a) ${user}!`);
+					return interaction.reply(`Você jogou uma banana no(a) ${user}!`);
 				}
 
 				itemValidation.amount += 1;
 				userData.save();
 
-				return interaction.followUp(`Você jogou uma banana no(a) ${user}!`);
+				return interaction.reply(`Você jogou uma banana no(a) ${user}!`);
 			},
 		},
 		{
@@ -45,7 +45,7 @@ module.exports = {
 			'use': (interaction, profileData) => {
 				profileData.maceta_multiplier += 0.2;
 
-				return interaction.followUp(`Seu multiplicador: ${inlineCode(profileData.maceta_multiplier)} :chart_with_upwards_trend:`);
+				return interaction.reply(`Seu multiplicador: ${inlineCode(profileData.maceta_multiplier)} :chart_with_upwards_trend:`);
 			},
 		},
 		{
@@ -56,7 +56,7 @@ module.exports = {
 			'use': (interaction, profileData) => {
 				profileData.maceta_starPower = true;
 
-				return interaction.followUp('FRUTA ESTRELA ATIVADA!');
+				return interaction.reply('FRUTA ESTRELA ATIVADA!');
 			},
 		},
 	],

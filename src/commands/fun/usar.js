@@ -15,11 +15,11 @@ module.exports = {
 
 		const item = shop.find(items => items.itemID == itemID);
 
-		if (!item) return interaction.followUp('Informe um item válido!');
+		if (!item) return interaction.reply('Informe um item válido!');
 
 		const getItemInInventory = profileData.inventory.find(it => it.item_name == item.name);
 
-		if (!getItemInInventory) return interaction.followUp('Você não tem este item no inventário.');
+		if (!getItemInInventory) return interaction.reply('Você não tem este item no inventário.');
 
 		item.use(interaction, profileData);
 

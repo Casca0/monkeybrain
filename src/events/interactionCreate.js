@@ -8,8 +8,6 @@ module.exports = {
 
 		const command = commands.get(interaction.commandName);
 
-		await interaction.deferReply();
-
 		// Database
 
 		let profileData;
@@ -27,38 +25,39 @@ module.exports = {
 
 		// Command cooldown
 
-		if (!cooldowns.has(command.data.name)) {
-			cooldowns.set(command.data.name, new Collection());
-		}
-
-		const timestamps = cooldowns.get(command.data.name);
-
-		if (profileData.maceta_starPower) {
-			timestamps.delete(interaction.user.id);
-			setTimeout(() => {
-				profileData.maceta_starPower = false;
-				profileData.save();
-				return;
-			}, 10000);
-		}
-		else {
-			const cooldownAmount = command.cooldown || 3;
-
-			const now = Date.now();
-
-			if (timestamps.has(interaction.user.id)) {
-				const expirationTime = timestamps.get(interaction.user.id) + cooldownAmount * 1000;
-
-				if (now < expirationTime) {
-					const timeLeftUnix = (expirationTime / 1000).toFixed(0);
-
-					return interaction.followUp(`Você pode usar o comando ${inlineCode(command.data.name)} <t:${timeLeftUnix}:R>.`);
-				}
+		if (!interaction.isButton()) {
+			if (!cooldowns.has(command.data.name)) {
+				cooldowns.set(command.data.name, new Collection());
 			}
+			const timestamps = cooldowns.get(command.data.name);
 
-			timestamps.set(interaction.user.id, now);
+			if (profileData.maceta_starPower) {
+				timestamps.delete(interaction.user.id);
+				setTimeout(() => {
+					profileData.maceta_starPower = false;
+					profileData.save();
+					return;
+				}, 10000);
+			}
+			else {
+				const cooldownAmount = command.cooldown || 3;
 
-			setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount * 1000);
+				const now = Date.now();
+
+				if (timestamps.has(interaction.user.id)) {
+					const expirationTime = timestamps.get(interaction.user.id) + cooldownAmount * 1000;
+
+					if (now < expirationTime) {
+						const timeLeftUnix = (expirationTime / 1000).toFixed(0);
+
+						return interaction.reply(`Você pode usar o comando ${inlineCode(command.data.name)} <t:${timeLeftUnix}:R>.`);
+					}
+				}
+
+				timestamps.set(interaction.user.id, now);
+
+				setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount * 1000);
+			}
 		}
 
 		// Executing command
@@ -69,7 +68,7 @@ module.exports = {
 			}
 			catch (e) {
 				console.error(e);
-				return interaction.followUp(`Ocorreu um erro\n${e}`);
+				return interaction.reply(`Ocorreu um erro\n${e}`);
 			}
 		}
 		else if (interaction.isUserContextMenuCommand()) {
@@ -78,7 +77,7 @@ module.exports = {
 			}
 			catch (e) {
 				console.error(e);
-				return interaction.followUp(`Ocorreu um erro\n${e}`);
+				return interaction.reply(`Ocorreu um erro\n${e}`);
 			}
 		}
 	},

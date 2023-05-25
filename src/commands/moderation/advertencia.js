@@ -104,7 +104,7 @@ module.exports = {
 				timestamp: new Date().toISOString(),
 			});
 
-			return interaction.followUp({ embeds: [advertMessage] });
+			return interaction.reply({ embeds: [advertMessage] });
 		}
 
 		if (command == 'limpar') {
@@ -115,14 +115,14 @@ module.exports = {
 			const advertsLength = record.adverts.length;
 
 			if (advertsLength == 0) {
-				return interaction.followUp('Este user não tem advertências.');
+				return interaction.reply('Este user não tem advertências.');
 			}
 
 			record.adverts.splice(0, advertsLength);
 
 			record.save();
 
-			return interaction.followUp(`Advertências excluidas de ${user} : ${inlineCode(advertsLength)}`);
+			return interaction.reply(`Advertências excluidas de ${user} : ${inlineCode(advertsLength)}`);
 		}
 	},
 };

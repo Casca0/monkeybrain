@@ -11,6 +11,6 @@ module.exports = {
 	// eslint-disable-next-line no-unused-vars
 	async execute(interaction, profileData) {
 
-		return interaction.followUp('POING!');
+		return interaction.reply('POING!');
 	},
 };

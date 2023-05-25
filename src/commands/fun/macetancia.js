@@ -73,7 +73,7 @@ module.exports = {
 			profileData.maceta_counter += 1;
 			profileData.save();
 
-			interaction.followUp({ embeds: [macetaMessage] });
+			interaction.reply({ embeds: [macetaMessage] });
 
 			break;
 
@@ -94,7 +94,7 @@ module.exports = {
 			userData.maceta_counter += 1;
 			userData.save();
 
-			interaction.followUp({ embeds: [macetaMessage] });
+			interaction.reply({ embeds: [macetaMessage] });
 
 			break;
 
@@ -108,7 +108,7 @@ module.exports = {
 			profileData.maceta_counter += 1;
 			profileData.save();
 
-			interaction.followUp({ embeds: [macetaMessage] });
+			interaction.reply({ embeds: [macetaMessage] });
 
 			break;
 		default:
@@ -117,7 +117,7 @@ module.exports = {
 				macetaMessage.setDescription(`TCHU TCHU | ${user}`);
 				macetaMessage.setImage('https://c.tenor.com/ebTWNO6KmNYAAAAC/picapau-puchapenas.gif');
 
-				return interaction.followUp({ embeds: [macetaMessage] });
+				return interaction.reply({ embeds: [macetaMessage] });
 			}
 			else if (bankMaceta === 20 && userData.bank >= 0) {
 				macetaMessage.setTitle('VOCÊ MACETOU ESTE USER TÃO FORTE QUE TIROU DINHEIRO DO BANCO DELE');
@@ -147,7 +147,7 @@ module.exports = {
 				userData.maceta_counter += 1;
 				userData.save();
 
-				return interaction.followUp({ embeds: [macetaMessage] });
+				return interaction.reply({ embeds: [macetaMessage] });
 			}
 			else {
 				profileData.coins += bananinhasAmount;
@@ -161,7 +161,7 @@ module.exports = {
 				userData.coins -= bananinhasAmount;
 				userData.save();
 
-				return interaction.followUp({ embeds: [macetaMessage] });
+				return interaction.reply({ embeds: [macetaMessage] });
 			}
 		}
 	},

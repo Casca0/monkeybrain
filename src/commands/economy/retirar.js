@@ -17,9 +17,9 @@ module.exports = {
 
 		if (quantity == 'tudo') quantity = profileData.bank;
 
-		if (quantity % 1 != 0 || quantity <= 0) return interaction.followUp('Informe um número inteiro!');
+		if (quantity % 1 != 0 || quantity <= 0) return interaction.reply('Informe um número inteiro!');
 
-		if (quantity > profileData.bank) return interaction.followUp('Você não tem essa quantia de moedas!');
+		if (quantity > profileData.bank) return interaction.reply('Você não tem essa quantia de moedas!');
 
 		await userModel.findOneAndUpdate(
 			{
@@ -33,6 +33,6 @@ module.exports = {
 			},
 		);
 
-		return interaction.followUp(`Você retirou :coin: ${inlineCode(quantity)} Bananinhas Reais do seu banco!`);
+		return interaction.reply(`Você retirou :coin: ${inlineCode(quantity)} Bananinhas Reais do seu banco!`);
 	},
 };

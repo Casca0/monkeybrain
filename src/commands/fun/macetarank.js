@@ -22,6 +22,6 @@ module.exports = {
 			color: 0x4429cc,
 		});
 
-		return interaction.followUp({ embeds: [rankCard] });
+		return interaction.reply({ embeds: [rankCard] });
 	},
 };

@@ -31,12 +31,12 @@ module.exports = {
 		});
 
 		try {
-			interaction.followUp({ embeds: [banMessage] });
+			interaction.reply({ embeds: [banMessage] });
 			return await resolvedUser.ban({ reason: `${reason}` });
 		}
 		catch (err) {
 			console.error(err);
-			return interaction.followUp('O user que você selecionou provavelmente não pode ser banido!');
+			return interaction.reply('O user que você selecionou provavelmente não pode ser banido!');
 		}
 	},
 };
