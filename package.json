@@ -20,11 +20,11 @@
 	"homepage": "https://github.com/Casca0/monkeybrain#readme",
 	"dependencies": {
 		"discord.js": "^14.11.0",
-		"dotenv": "^16.0.3",
+		"dotenv": "^16.3.1",
 		"express": "^4.18.2",
-		"mongoose": "^7.2.0"
+		"mongoose": "^7.3.4"
 	},
 	"devDependencies": {
-		"eslint": "^8.41.0"
+		"eslint": "^8.44.0"
 	}
 }

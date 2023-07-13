@@ -126,10 +126,13 @@ module.exports = {
 
 				if (userData.bank === 0) {
 					if (userData.coins < macetaBankAmount) {
+						macetaBankAmount = userData.coins;
 						userData.coins -= macetaBankAmount;
 					}
+					if (userData.coins === 0) {
+						profileData.coins += macetaBankAmount;
+					}
 					else {
-						macetaBankAmount = userData.coins;
 						userData.coins -= macetaBankAmount;
 					}
 				}
