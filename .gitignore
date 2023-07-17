@@ -103,10 +103,12 @@ dist
 # TernJS port file
 .tern-port
 
-# Enviroment secrets
-.env
-
 # Development database
 
 .forestadmin-schema.json
 src/database/database.sqlite
+
+.env*
+.flaskenv*
+!.env.project
+!.env.vault
