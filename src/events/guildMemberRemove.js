@@ -29,7 +29,7 @@ module.exports = {
 
 		const kickMessage = new EmbedBuilder({
 			color: 0xb88e1d,
-			title: 'Membro Kickado',
+			title: 'Membro Removido',
 			fields: [
 				{
 					name: 'Membro',

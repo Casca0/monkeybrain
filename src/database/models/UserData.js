@@ -43,6 +43,10 @@ const UserData = new Schema({
 		type: Boolean,
 		default: false,
 	},
+	maceta_failed: {
+		type: Boolean,
+		default: false,
+	},
 	wallet_name: {
 		type: String,
 		default: 'Carteira',

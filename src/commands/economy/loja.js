@@ -132,7 +132,7 @@ module.exports = {
 			});
 
 			if (itemCost > profileData.coins) {
-				return await interaction.reply('Você não tem moedas suficientes para comprar este item!');
+				return interaction.reply('Você não tem moedas suficientes para comprar este item!');
 			}
 
 			if (getItemInInventory) {

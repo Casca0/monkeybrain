@@ -31,6 +31,8 @@ module.exports = {
 			}
 			const timestamps = cooldowns.get(command.data.name);
 
+			const now = Date.now();
+
 			if (profileData.maceta_starPower) {
 				timestamps.delete(interaction.user.id);
 				setTimeout(() => {
@@ -39,25 +41,23 @@ module.exports = {
 					return;
 				}, 10000);
 			}
-			else {
-				const cooldownAmount = command.cooldown || 3;
 
-				const now = Date.now();
+			const cooldownAmount = command.cooldown || 3;
 
-				if (timestamps.has(interaction.user.id)) {
-					const expirationTime = timestamps.get(interaction.user.id) + cooldownAmount * 1000;
+			if (timestamps.has(interaction.user.id)) {
+				const expirationTime = timestamps.get(interaction.user.id) + cooldownAmount * 1000;
 
-					if (now < expirationTime) {
-						const timeLeftUnix = (expirationTime / 1000).toFixed(0);
+				if (now < expirationTime) {
+					const timeLeftUnix = (expirationTime / 1000).toFixed(0);
 
-						return interaction.reply(`Você pode usar o comando ${inlineCode(command.data.name)} <t:${timeLeftUnix}:R>.`);
-					}
+					return interaction.reply(`Você pode usar o comando ${inlineCode(command.data.name)} <t:${timeLeftUnix}:R>.`);
 				}
-
-				timestamps.set(interaction.user.id, now);
-
-				setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount * 1000);
 			}
+
+			timestamps.set(interaction.user.id, now);
+
+			setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount * 1000);
+
 		}
 
 		// Executing command

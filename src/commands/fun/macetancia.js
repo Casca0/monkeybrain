@@ -15,6 +15,29 @@ module.exports = {
 
 		const user = interaction.guild.members.cache.random().user;
 
+		if (profileData.maceta_failed) {
+			setTimeout(() => {
+				profileData.maceta_failed = false;
+				profileData.save();
+				return;
+			}, 300000);
+
+			const failedMacetaMessage = new EmbedBuilder({
+				color: 0xebe41c,
+				title: 'Você ainda está desnorteado por macetar um bot!',
+				image: {
+					url: 'https://media.tenor.com/nFcwQTScDg8AAAAd/monkey-shocked-monkey.gif',
+				},
+				timestamp: new Date().toISOString(),
+				footer: {
+					text: interaction.user.username,
+					icon_url: interaction.user.avatarURL(),
+				},
+			});
+
+			return interaction.reply({ embeds: [failedMacetaMessage] });
+		}
+
 		// If user doesn't have profileData, create it
 
 		let userData;
@@ -60,26 +83,17 @@ module.exports = {
 		const bankMaceta = Math.floor(Math.random() * 250) + 1;
 		let macetaBankAmount = bananinhasAmount + 1000 * 2;
 
-		// Switch
-
-		switch (user.id) {
-
-		// Case ID from author
-
-		case interaction.user.id:
+		if (user.id == interaction.user.id) {
 			macetaMessage.setTitle('Você se macetou, parabéns! :banana:');
 			macetaMessage.setDescription(`${user}`);
 
 			profileData.maceta_counter += 1;
 			profileData.save();
 
-			interaction.reply({ embeds: [macetaMessage] });
+			return interaction.reply({ embeds: [macetaMessage] });
+		}
 
-			break;
-
-			// Case ID from admin
-
-		case '380198082811396097':
+		else if (user.id == interaction.guild.ownerId) {
 			macetaMessage.setTitle('Você macetou o ADM');
 			macetaMessage.setDescription(`E ganhou ${bananinhasAmount} Bananinhas Reais :coin::banana: por isso!`);
 			macetaMessage.setImage('https://media1.tenor.com/images/1d78b613692b7cfe01c2f2a4a0b2f6fc/tenor.gif?itemid=5072717');
@@ -94,75 +108,65 @@ module.exports = {
 			userData.maceta_counter += 1;
 			userData.save();
 
-			interaction.reply({ embeds: [macetaMessage] });
+			return interaction.reply({ embeds: [macetaMessage] });
+		}
 
-			break;
+		else if (user.id == interaction.client.application.id) {
+			macetaMessage.setTitle('Tem dinheiro não.');
+			macetaMessage.setDescription(`${user}`);
+			macetaMessage.setImage('https://media.tenor.com/eZjQ5C2jwU8AAAAC/monkey-money.gif');
 
-			// Case ID from client
+			return interaction.reply({ embeds: [macetaMessage] });
+		}
 
-		case '840221907622166579':
-			macetaMessage.setTitle('VOCÊ TENTOU ME MACETAR?');
-			macetaMessage.setDescription('ENTÃO SEJA MACETADO!');
-			macetaMessage.setImage('https://i.imgur.com/mWw7OIa.gif');
+		else if (user.bot) {
+			macetaMessage.setTitle('Foi de cabeça na lata.');
+			macetaMessage.setDescription(`Perde a próxima macetada | ${user}`);
+			macetaMessage.setImage('https://c.tenor.com/ebTWNO6KmNYAAAAC/picapau-puchapenas.gif');
 
-			profileData.maceta_counter += 1;
+			profileData.maceta_failed = true;
 			profileData.save();
 
-			interaction.reply({ embeds: [macetaMessage] });
+			return interaction.reply({ embeds: [macetaMessage] });
+		}
 
-			break;
-		default:
-			if (user.bot) {
-				macetaMessage.setTitle('MACETOU UM BOT');
-				macetaMessage.setDescription(`TCHU TCHU | ${user}`);
-				macetaMessage.setImage('https://c.tenor.com/ebTWNO6KmNYAAAAC/picapau-puchapenas.gif');
+		if (bankMaceta === 20 && userData.bank > 0) {
+			macetaMessage.setTitle('VOCÊ MACETOU ESTE USER TÃO FORTE QUE TIROU DINHEIRO DO BANCO DELE');
+			macetaMessage.setDescription(`Você tirou :coin: BR ${macetaBankAmount} do banco de ${user}`);
+			macetaMessage.setImage('https://media.tenor.com/tEMIpAruG6sAAAAd/mucalol.gif');
 
-				return interaction.reply({ embeds: [macetaMessage] });
-			}
-			else if (bankMaceta === 20 && userData.bank >= 0) {
-				macetaMessage.setTitle('VOCÊ MACETOU ESTE USER TÃO FORTE QUE TIROU DINHEIRO DO BANCO DELE');
-				macetaMessage.setDescription(`Você tirou :coin: BR ${macetaBankAmount} do banco de ${user}`);
-				macetaMessage.setImage('https://media.tenor.com/tEMIpAruG6sAAAAd/mucalol.gif');
-
-				if (userData.bank === 0) {
-					if (userData.coins < macetaBankAmount) {
-						macetaBankAmount = userData.coins;
-						userData.coins -= macetaBankAmount;
-					}
-					else {
-						userData.coins -= macetaBankAmount;
-					}
-				}
-				else if (userData.bank < macetaBankAmount) {
-					macetaBankAmount = userData.bank;
-					userData.bank -= macetaBankAmount;
-				}
-				else {
-					userData.bank -= macetaBankAmount;
-				}
-
-				profileData.coins += macetaBankAmount;
-				profileData.save();
-
-				userData.maceta_counter += 1;
-				userData.save();
-
-				return interaction.reply({ embeds: [macetaMessage] });
+			if (macetaBankAmount > userData.bank) {
+				macetaBankAmount = userData.bank;
+				userData.bank -= macetaBankAmount;
 			}
 			else {
-				profileData.coins += bananinhasAmount;
-				profileData.save();
-
-				if (bananinhasAmount > userData.coins) {
-					bananinhasAmount = userData.coins;
-				}
-
-				userData.maceta_counter += 1;
-				userData.coins -= bananinhasAmount;
-				userData.save();
-
-				return interaction.reply({ embeds: [macetaMessage] });
+				userData.bank -= macetaBankAmount;
 			}
+
+			profileData.coins += macetaBankAmount;
+			profileData.save();
+
+			userData.maceta_counter += 1;
+			userData.save();
+
+			return interaction.reply({ embeds: [macetaMessage] });
+		}
+		else {
+			if (userData.coins > 0 && bananinhasAmount > userData.coins) {
+				bananinhasAmount = userData.coins;
+			}
+
+			else if (userData.coins > bananinhasAmount) {
+				userData.coins -= bananinhasAmount;
+			}
+
+			profileData.coins += bananinhasAmount;
+			profileData.save();
+
+			userData.maceta_counter += 1;
+			userData.save();
+
+			return interaction.reply({ embeds: [macetaMessage] });
 		}
 	},
 };
