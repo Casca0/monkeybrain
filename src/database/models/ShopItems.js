@@ -40,10 +40,14 @@ module.exports = {
 		{
 			'name': 'banana abençoada',
 			'itemID': 2,
-			'cost': 30000,
+			'cost': 20000,
 			'useDescription': 'Use este item para aumentar seu multiplicador de bananinhas!',
 			'use': (interaction, profileData) => {
-				profileData.maceta_multiplier += 0.2;
+				if (profileData.maceta_multiplier == 5) {
+					return interaction.reply('Seu multiplicador já está no máximo!');
+				}
+
+				profileData.maceta_multiplier += 0.4;
 
 				return interaction.reply(`Seu multiplicador: ${inlineCode(profileData.maceta_multiplier)} :chart_with_upwards_trend:`);
 			},
@@ -51,7 +55,7 @@ module.exports = {
 		{
 			'name': 'fruta estrela',
 			'itemID': 3,
-			'cost': 15000,
+			'cost': 5000,
 			'useDescription': 'Use este item para poder macetar sem pausas por 10 segundos!',
 			'use': (interaction, profileData) => {
 				profileData.maceta_starPower = true;

@@ -55,7 +55,7 @@ module.exports = {
 				},
 				{
 					name: 'Multiplicador',
-					value: `:chart_with_upwards_trend: ${userData.maceta_multiplier}x`,
+					value: `:chart_with_upwards_trend: ${userData.maceta_multiplier}x (max: 5x)`,
 				},
 				{
 					name: 'Macetadas',
