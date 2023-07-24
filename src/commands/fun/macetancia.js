@@ -20,7 +20,7 @@ module.exports = {
 				profileData.maceta_failed = false;
 				profileData.save();
 				return;
-			}, 300000);
+			}, 120000);
 
 			const failedMacetaMessage = new EmbedBuilder({
 				color: 0xebe41c,
