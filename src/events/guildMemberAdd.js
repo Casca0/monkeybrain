@@ -6,7 +6,7 @@ module.exports = {
 		client.newUsers.set(member.id, member.user);
 
 		const defaultChannel = member.guild.systemChannel;
-		const userList = client.newUsers.map(u => u.toString()).join(' ');
+		const userList = client.newUsers.map(u => u.toString()).slice(-1);
 
 		const welcomeMessage = new EmbedBuilder({
 			color: 0xf0f714,

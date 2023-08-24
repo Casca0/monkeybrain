@@ -11,7 +11,7 @@ module.exports = {
 	// eslint-disable-next-line no-unused-vars
 	async execute(interaction, profileData) {
 
-		console.log(interaction.client.application.id);
+		console.log(interaction.client.newUsers.map(u => u.toString()).slice(-1));
 
 		return interaction.reply('POING!');
 	},

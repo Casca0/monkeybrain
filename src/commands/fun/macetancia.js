@@ -13,6 +13,10 @@ module.exports = {
 	async execute(interaction, profileData) {
 		await interaction.guild.members.fetch();
 
+		if (process.env.DEVELOPMENT) {
+			return interaction.reply('Bot em manutenção.');
+		}
+
 		const user = interaction.guild.members.cache.random().user;
 
 		if (profileData.maceta_failed) {
