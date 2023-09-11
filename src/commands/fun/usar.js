@@ -13,7 +13,7 @@ module.exports = {
 			option.setName('id').setDescription('ID do item.').setRequired(true),
 		)
 		.setDMPermission(false),
-	execute(interaction, profileData) {
+	async execute(interaction, profileData) {
 		const itemID = interaction.options.getInteger('id');
 
 		const item = shop.find(items => items.itemID == itemID);
@@ -26,7 +26,7 @@ module.exports = {
 
 		if (interaction.options.getBoolean('use') && getItemInInventory.amount > 1) {
 			for (let index = 0; index <= getItemInInventory.amount; index++) {
-				item.use(interaction, profileData);
+				await item.use(interaction, profileData);
 			}
 			return;
 		}
