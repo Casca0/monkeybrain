@@ -56,7 +56,7 @@ module.exports = {
 			'use': (interaction, profileData) => {
 				profileData.maceta_starPower = true;
 
-				return interaction.reply('FRUTA ESTRELA ATIVADA!');
+				return interaction.followUp('FRUTA ESTRELA ATIVADA!');
 			},
 		},
 	],
