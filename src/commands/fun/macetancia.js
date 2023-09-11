@@ -19,28 +19,28 @@ module.exports = {
 
 		const user = interaction.guild.members.cache.random().user;
 
-		if (profileData.maceta_failed) {
-			setTimeout(() => {
-				profileData.maceta_failed = false;
-				profileData.save();
-				return;
-			}, 120000);
+		// if (profileData.maceta_failed) {
+		// 	setTimeout(() => {
+		// 		profileData.maceta_failed = false;
+		// 		profileData.save();
+		// 		return;
+		// 	}, 120000);
 
-			const failedMacetaMessage = new EmbedBuilder({
-				color: 0xebe41c,
-				title: 'Você ainda está desnorteado por macetar um bot!',
-				image: {
-					url: 'https://media.tenor.com/nFcwQTScDg8AAAAd/monkey-shocked-monkey.gif',
-				},
-				timestamp: new Date().toISOString(),
-				footer: {
-					text: interaction.user.username,
-					icon_url: interaction.user.avatarURL(),
-				},
-			});
+		// 	const failedMacetaMessage = new EmbedBuilder({
+		// 		color: 0xebe41c,
+		// 		title: 'Você ainda está desnorteado por macetar um bot!',
+		// 		image: {
+		// 			url: 'https://media.tenor.com/nFcwQTScDg8AAAAd/monkey-shocked-monkey.gif',
+		// 		},
+		// 		timestamp: new Date().toISOString(),
+		// 		footer: {
+		// 			text: interaction.user.username,
+		// 			icon_url: interaction.user.avatarURL(),
+		// 		},
+		// 	});
 
-			return interaction.reply({ embeds: [failedMacetaMessage] });
-		}
+		// 	return interaction.reply({ embeds: [failedMacetaMessage] });
+		// }
 
 		// If user doesn't have profileData, create it
 
@@ -64,7 +64,7 @@ module.exports = {
 
 		// Generate coins amount
 
-		let bananinhasAmount = Math.round((Math.floor(Math.random() * 450) + 1) * profileData.maceta_multiplier);
+		let bananinhasAmount = Math.round(450 * profileData.maceta_multiplier);
 
 		// Create embed message
 
