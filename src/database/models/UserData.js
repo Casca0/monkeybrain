@@ -38,7 +38,6 @@ const UserData = new Schema({
 	maceta_multiplier: {
 		type: Number,
 		default: 1.0,
-		max: 5.0,
 	},
 	maceta_starPower: {
 		type: Boolean,

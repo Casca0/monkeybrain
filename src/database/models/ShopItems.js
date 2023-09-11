@@ -43,10 +43,6 @@ module.exports = {
 			'cost': 20000,
 			'useDescription': 'Use este item para aumentar seu multiplicador de bananinhas!',
 			'use': (interaction, profileData) => {
-				if (profileData.maceta_multiplier == 5) {
-					return interaction.reply('Seu multiplicador já está no máximo!');
-				}
-
 				profileData.maceta_multiplier += 0.4;
 
 				return interaction.reply(`Seu multiplicador: ${inlineCode(profileData.maceta_multiplier)} :chart_with_upwards_trend:`);
