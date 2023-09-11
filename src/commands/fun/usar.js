@@ -24,6 +24,8 @@ module.exports = {
 
 		if (!getItemInInventory) return interaction.reply('Você não tem este item no inventário.');
 
+		await interaction.deferReply();
+
 		if (interaction.options.getBoolean('use') && getItemInInventory.amount > 1) {
 			for (let index = 0; index <= getItemInInventory.amount; index++) {
 				await item.use(interaction, profileData);

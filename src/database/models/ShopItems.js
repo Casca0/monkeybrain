@@ -43,7 +43,6 @@ module.exports = {
 			'cost': 20000,
 			'useDescription': 'Use este item para aumentar seu multiplicador de bananinhas!',
 			'use': async (interaction, profileData) => {
-				await interaction.deferReply();
 				profileData.maceta_multiplier += 0.4;
 
 				return interaction.followUp(`Seu multiplicador: ${inlineCode(profileData.maceta_multiplier)} :chart_with_upwards_trend:`);
