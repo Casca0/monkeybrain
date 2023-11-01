@@ -36,7 +36,18 @@ module.exports = {
 
 		const logChannel = interaction.guild.publicUpdatesChannel;
 
-		const record = await userModel.findOne({ user_id: user.id });
+		let record;
+		try {
+			record = await userModel.findOne({ user_id: user.id });
+			if (!record) {
+				await userModel.create({
+					user_id: interaction.user.id,
+				}).then(res => record = res);
+			}
+		}
+		catch (err) {
+			console.error(err);
+		}
 
 		if (command == 'criar') {
 			const reason = interaction.options.getString('motivo') || 'Sem motivo';
