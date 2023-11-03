@@ -41,7 +41,7 @@ module.exports = {
 			record = await userModel.findOne({ user_id: user.id });
 			if (!record) {
 				await userModel.create({
-					user_id: interaction.user.id,
+					user_id: user.id,
 				}).then(res => record = res);
 			}
 		}
@@ -59,10 +59,6 @@ module.exports = {
 			record.save();
 
 			const adverts = record.adverts;
-
-			if (adverts.length == 10) {
-				await resolvedUser.kick('Execesso de advertências.');
-			}
 
 			if (adverts.length >= 5) {
 				const timeoutAmount = ((adverts.length * 5) * 60000) + Date.now();
