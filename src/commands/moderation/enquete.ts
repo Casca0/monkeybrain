@@ -115,6 +115,14 @@ export async function run({ interaction }: SlashCommandProps) {
 			}) => never;
 		}) => {
 			if (onlineAdmins?.find((member) => member === intr.member)) {
+				if (
+					collector.collected.filter(
+						(button) => button.member?.user.id === intr.member.user.id
+					).size > 1
+				) {
+					collector.collected.delete(collector.collected.keyAt(-1)!);
+					return;
+				}
 				const okayVotes = collector.collected.filter(
 					(button) => button.customId === 'okay'
 				).size;
@@ -142,6 +150,7 @@ export async function run({ interaction }: SlashCommandProps) {
 						{
 							name: 'Votos contra',
 							value: `${againstVotes}/${onlineAdmins?.size}`,
+							inline: true,
 						},
 					],
 					timestamp: new Date().toISOString(),

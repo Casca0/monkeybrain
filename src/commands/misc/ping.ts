@@ -12,10 +12,15 @@ export async function run({ interaction, client }: SlashCommandProps) {
 		(member) => member.permissions.has('Administrator') && !member.user.bot
 	);
 
-	console.log(adminUsers?.size);
+	const onlineAdmins = adminUsers?.filter(
+		(member) => member.presence?.status !== 'offline'
+	);
+
+	console.log(onlineAdmins);
 
 	interaction.reply(`:ping_pong: Pong! ${client.ws.ping}ms`);
 }
+
 export const options: CommandOptions = {
 	userPermissions: ['Administrator', 'AddReactions'],
 	deleted: false,
