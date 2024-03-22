@@ -120,6 +120,7 @@ export async function run({ interaction }: SlashCommandProps) {
 						(button) => button.member?.user.id === intr.member.user.id
 					).size > 1
 				) {
+					collector.collected.delete(collector.collected.keyAt(-1)!);
 					return;
 				}
 
