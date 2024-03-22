@@ -2,11 +2,17 @@
 	"name": "monkeybrain",
 	"version": "1.0.0",
 	"description": "Monkey brain but better",
-	"main": "src/index.js",
+	"type": "module",
+	"private": "true",
 	"scripts": {
+		"build": "rimraf dist && tsc",
 		"delete": "node src/utils/delete-commands.js",
-		"prestart": "node src/utils/prod-deploy.js",
-		"start": "node ."
+		"prestart": "tsc",
+		"start": "node dist/index.js",
+		"dev": "npm run build && node dist/index.js"
+	},
+	"imports": {
+		"#bot/*": "./dist/*.js"
 	},
 	"repository": {
 		"type": "git",
@@ -19,12 +25,19 @@
 	},
 	"homepage": "https://github.com/Casca0/monkeybrain#readme",
 	"dependencies": {
-		"discord.js": "^14.13.0",
-		"dotenv": "^16.3.1",
-		"express": "^4.18.2",
-		"mongoose": "^7.4.4"
+		"@napi-rs/canvas": "^0.1.51",
+		"commandkit": "^0.1.10",
+		"discord.js": "^14.14.1",
+		"dotenv": "^16.4.5",
+		"express": "^4.18.3",
+		"mongoose": "^8.2.1"
 	},
 	"devDependencies": {
-		"eslint": "^8.47.0"
+		"@types/express": "^4.17.21",
+		"@typescript-eslint/eslint-plugin": "^6.21.0",
+		"@typescript-eslint/parser": "^6.21.0",
+		"eslint": "^8.57.0",
+		"rimraf": "^5.0.5",
+		"typescript": "^5.4.2"
 	}
 }
