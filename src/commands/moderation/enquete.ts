@@ -42,10 +42,14 @@ export async function run({ interaction }: SlashCommandProps) {
 		(member) => member.permissions.has('Administrator') && !member.user.bot
 	);
 
+	const onlineAdmins = adminUsers?.filter(
+		(member) => member.presence?.status !== 'offline'
+	);
+
 	await interaction.deferReply();
 
 	const banEmbed = new EmbedBuilder({
-		color: 0xfc1e1e,
+		color: 0x8031e8,
 		title: 'ENQUETE',
 		fields: [
 			{
@@ -58,12 +62,12 @@ export async function run({ interaction }: SlashCommandProps) {
 			},
 			{
 				name: 'Votos à favor',
-				value: `0/${adminUsers?.size}`,
+				value: `0/${onlineAdmins?.size}`,
 				inline: true,
 			},
 			{
 				name: 'Votos contra',
-				value: `0/${adminUsers?.size}`,
+				value: `0/${onlineAdmins?.size}`,
 				inline: true,
 			},
 		],
@@ -110,7 +114,7 @@ export async function run({ interaction }: SlashCommandProps) {
 				components: ActionRowBuilder<ButtonBuilder>[];
 			}) => never;
 		}) => {
-			if (adminUsers?.find((member) => member === intr.member)) {
+			if (onlineAdmins?.find((member) => member === intr.member)) {
 				const okayVotes = collector.collected.filter(
 					(button) => button.customId === 'okay'
 				).size;
@@ -119,7 +123,7 @@ export async function run({ interaction }: SlashCommandProps) {
 				).size;
 
 				const embed = new EmbedBuilder({
-					color: 0xfc1e1e,
+					color: 0x8031e8,
 					title: 'ENQUETE',
 					fields: [
 						{
@@ -132,12 +136,12 @@ export async function run({ interaction }: SlashCommandProps) {
 						},
 						{
 							name: 'Votos à favor',
-							value: `${okayVotes}/${adminUsers?.size}`,
+							value: `${okayVotes}/${onlineAdmins?.size}`,
 							inline: true,
 						},
 						{
 							name: 'Votos contra',
-							value: `${againstVotes}/${adminUsers?.size}`,
+							value: `${againstVotes}/${onlineAdmins?.size}`,
 						},
 					],
 					timestamp: new Date().toISOString(),
@@ -147,9 +151,9 @@ export async function run({ interaction }: SlashCommandProps) {
 					},
 				});
 
-				if (okayVotes >= adminUsers?.size && okayVotes > againstVotes) {
+				if (okayVotes >= onlineAdmins?.size && okayVotes > againstVotes) {
 					const successEmbed = new EmbedBuilder({
-						color: 0xfc1e1e,
+						color: 0x65e831,
 						title: 'Usuário foi banido com sucesso',
 						description: `${user}`,
 						timestamp: new Date().toISOString(),
@@ -168,11 +172,11 @@ export async function run({ interaction }: SlashCommandProps) {
 						components: [],
 					});
 				} else if (
-					againstVotes >= adminUsers?.size &&
+					againstVotes >= onlineAdmins?.size &&
 					againstVotes > okayVotes
 				) {
 					const failureEmbed = new EmbedBuilder({
-						color: 0xfc1e1e,
+						color: 0xff0f4f,
 						title: 'Usuário não foi banido.',
 						description: `${user}`,
 						timestamp: new Date().toISOString(),
