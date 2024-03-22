@@ -17,6 +17,7 @@ export const data: CommandData = {
 			type: ApplicationCommandOptionType.String,
 		},
 	],
+	dm_permission: false,
 };
 
 export async function run({ interaction }: SlashCommandProps) {
@@ -46,7 +47,6 @@ export async function run({ interaction }: SlashCommandProps) {
 }
 
 export const options: CommandOptions = {
-	guildOnly: true,
 	userPermissions: ['Administrator', 'BanMembers'],
 	deleted: false,
 };

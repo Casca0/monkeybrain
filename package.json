@@ -25,18 +25,19 @@
 	},
 	"homepage": "https://github.com/Casca0/monkeybrain#readme",
 	"dependencies": {
-		"commandkit": "^0.1.6",
+		"@napi-rs/canvas": "^0.1.51",
+		"commandkit": "^0.1.10",
 		"discord.js": "^14.14.1",
-		"dotenv": "^16.3.1",
-		"express": "^4.18.2",
-		"mongoose": "^8.0.3"
+		"dotenv": "^16.4.5",
+		"express": "^4.18.3",
+		"mongoose": "^8.2.1"
 	},
 	"devDependencies": {
 		"@types/express": "^4.17.21",
-		"@typescript-eslint/eslint-plugin": "^6.14.0",
-		"@typescript-eslint/parser": "^6.14.0",
-		"eslint": "^8.55.0",
+		"@typescript-eslint/eslint-plugin": "^6.21.0",
+		"@typescript-eslint/parser": "^6.21.0",
+		"eslint": "^8.57.0",
 		"rimraf": "^5.0.5",
-		"typescript": "^5.3.3"
+		"typescript": "^5.4.2"
 	}
 }
