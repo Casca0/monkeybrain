@@ -123,7 +123,6 @@ export async function run({ interaction }: SlashCommandProps) {
 					collector.collected.delete(collector.collected.keyAt(-1)!);
 					return;
 				}
-
 				const okayVotes = collector.collected.filter(
 					(button) => button.customId === 'okay'
 				).size;
