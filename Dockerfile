@@ -1,32 +1,20 @@
-FROM debian:bullseye as builder
+# Use a Node.js base image with a specific version
+FROM node:18.18.2
 
-ARG NODE_VERSION=18.15.0
+# Set the working directory inside the container
+WORKDIR /
 
-RUN apt-get update; apt install -y curl
-RUN curl https://get.volta.sh | bash
-ENV VOLTA_HOME /root/.volta
-ENV PATH /root/.volta/bin:$PATH
-RUN volta install node@${NODE_VERSION}
+# Copy the package.json and package-lock.json files
+COPY package*.json ./
 
-#######################################################################
+# Update package list
+RUN apt update
 
-RUN mkdir /app
-WORKDIR /app
+# Install dependencies
+RUN npm install
 
-ENV NODE_ENV production
-
+# Copy the rest of the application code
 COPY . .
 
-RUN npm install
-FROM debian:bullseye
-
-LABEL fly_launch_runtime="nodejs"
-
-COPY --from=builder /root/.volta /root/.volta
-COPY --from=builder /app /app
-
-WORKDIR /app
-ENV NODE_ENV production
-ENV PATH /root/.volta/bin:$PATH
-
+# Define the command to start the Node.js application
 CMD [ "npm", "run", "start" ]
