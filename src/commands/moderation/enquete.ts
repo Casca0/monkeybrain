@@ -181,7 +181,7 @@ export async function run({ interaction }: SlashCommandProps) {
 						description: `${user}`,
 						timestamp: new Date().toISOString(),
 						footer: {
-							text: 'Banido pelos ADMs',
+							text: 'Votação feita pelos ADMs',
 							iconURL: interaction.client.user.displayAvatarURL(),
 						},
 					});
