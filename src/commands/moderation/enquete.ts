@@ -46,6 +46,13 @@ export async function run({ interaction }: SlashCommandProps) {
 		(member) => member.presence?.status !== 'offline'
 	);
 
+	if (
+		adminUsers?.find((member) => member.id === user.id) ||
+		user.id === interaction.client.user.id
+	) {
+		return interaction.reply('Não é possível banir um dos ADMs.');
+	}
+
 	await interaction.deferReply();
 
 	const banEmbed = new EmbedBuilder({
@@ -78,12 +85,35 @@ export async function run({ interaction }: SlashCommandProps) {
 		},
 	});
 
+	const successEmbed = new EmbedBuilder({
+		color: 0x65e831,
+		title: 'Usuário foi banido com sucesso',
+		description: `${user}`,
+		timestamp: new Date().toISOString(),
+		footer: {
+			text: 'Banido pelos ADMs',
+			iconURL: interaction.client.user.displayAvatarURL(),
+		},
+	});
+
+	const failureEmbed = new EmbedBuilder({
+		color: 0xff0f4f,
+		title: 'Usuário não foi banido.',
+		description: `${user}`,
+		timestamp: new Date().toISOString(),
+		footer: {
+			text: 'Votação feita pelos ADMs',
+			iconURL: interaction.client.user.displayAvatarURL(),
+		},
+	});
+
 	const okayButton = new ButtonBuilder({
 		style: ButtonStyle.Success,
 		label: 'Pode Ban',
 		emoji: '👍',
 		customId: 'okay',
 	});
+
 	const backButton = new ButtonBuilder({
 		style: ButtonStyle.Danger,
 		label: 'Tá suave',
@@ -123,9 +153,11 @@ export async function run({ interaction }: SlashCommandProps) {
 					collector.collected.delete(collector.collected.keyAt(-1)!);
 					return;
 				}
+
 				const okayVotes = collector.collected.filter(
 					(button) => button.customId === 'okay'
 				).size;
+
 				const againstVotes = collector.collected.filter(
 					(button) => button.customId === 'back'
 				).size;
@@ -160,18 +192,25 @@ export async function run({ interaction }: SlashCommandProps) {
 					},
 				});
 
-				if (okayVotes >= onlineAdmins?.size && okayVotes > againstVotes) {
-					const successEmbed = new EmbedBuilder({
-						color: 0x65e831,
-						title: 'Usuário foi banido com sucesso',
-						description: `${user}`,
-						timestamp: new Date().toISOString(),
-						footer: {
-							text: 'Banido pelos ADMs',
-							iconURL: interaction.client.user.displayAvatarURL(),
-						},
-					});
+				if (okayVotes + againstVotes >= onlineAdmins.size) {
+					if (okayVotes > againstVotes) {
+						await resolvedUser?.ban({
+							reason: banReason,
+						});
 
+						return intr.update({
+							embeds: [successEmbed],
+							components: [],
+						});
+					} else {
+						return intr.update({
+							embeds: [failureEmbed],
+							components: [],
+						});
+					}
+				}
+
+				if (okayVotes >= onlineAdmins?.size && okayVotes > againstVotes) {
 					await resolvedUser?.ban({
 						reason: banReason,
 					});
@@ -184,17 +223,6 @@ export async function run({ interaction }: SlashCommandProps) {
 					againstVotes >= onlineAdmins?.size &&
 					againstVotes > okayVotes
 				) {
-					const failureEmbed = new EmbedBuilder({
-						color: 0xff0f4f,
-						title: 'Usuário não foi banido.',
-						description: `${user}`,
-						timestamp: new Date().toISOString(),
-						footer: {
-							text: 'Votação feita pelos ADMs',
-							iconURL: interaction.client.user.displayAvatarURL(),
-						},
-					});
-
 					return intr.update({
 						embeds: [failureEmbed],
 						components: [],
