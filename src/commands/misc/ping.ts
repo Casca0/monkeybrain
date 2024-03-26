@@ -12,11 +12,13 @@ export async function run({ interaction, client }: SlashCommandProps) {
 		(member) => member.permissions.has('Administrator') && !member.user.bot
 	);
 
-	const onlineAdmins = adminUsers?.filter(
-		(member) => member.presence?.status !== 'offline'
+	const onlineAdmins = adminUsers?.filter((member) =>
+		['idle', 'dnd', 'online'].includes(`${member.presence?.status}`)
 	);
 
-	console.log(onlineAdmins);
+	onlineAdmins?.each((member) => {
+		console.log(member.displayName, member.presence?.status);
+	});
 
 	interaction.reply(`:ping_pong: Pong! ${client.ws.ping}ms`);
 }

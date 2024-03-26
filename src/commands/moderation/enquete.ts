@@ -42,8 +42,8 @@ export async function run({ interaction }: SlashCommandProps) {
 		(member) => member.permissions.has('Administrator') && !member.user.bot
 	);
 
-	const onlineAdmins = adminUsers?.filter(
-		(member) => member.presence?.status !== 'offline'
+	const onlineAdmins = adminUsers?.filter((member) =>
+		['idle', 'dnd', 'online'].includes(`${member.presence?.status}`)
 	);
 
 	if (
