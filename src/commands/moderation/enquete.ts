@@ -80,7 +80,7 @@ export async function run({ interaction }: SlashCommandProps) {
 		],
 		timestamp: new Date().toISOString(),
 		footer: {
-			text: `Banido por ${interaction.user.tag}`,
+			text: `Votação iniciada por ${interaction.user.tag}`,
 			iconURL: interaction.user.displayAvatarURL(),
 		},
 	});
@@ -128,6 +128,36 @@ export async function run({ interaction }: SlashCommandProps) {
 				components: [okayButton, backButton],
 			}),
 		],
+	});
+
+	const adminNotifyEmbed = new EmbedBuilder({
+		color: 0x65e831,
+		title: 'Uma votação foi iniciada',
+		fields: [
+			{
+				name: 'Usuário à ser banido',
+				value: `${user}`,
+			},
+			{
+				name: 'Motivo',
+				value: `${banReason}`,
+			},
+			{
+				name: 'Canal da votação',
+				value: `[Link](${interaction.channel?.url})`,
+			},
+		],
+		timestamp: new Date().toISOString(),
+		footer: {
+			text: `Votação iniciada por ${interaction.user.tag}`,
+			iconURL: interaction.user.displayAvatarURL(),
+		},
+	});
+
+	onlineAdmins?.each((admin) => {
+		admin.send({
+			embeds: [adminNotifyEmbed],
+		});
 	});
 
 	const collector = reply.createMessageComponentCollector({
