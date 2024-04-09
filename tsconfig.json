@@ -11,16 +11,11 @@
 		"forceConsistentCasingInFileNames": true,
 		"strict": true,
 		"skipLibCheck": true,
+		"incremental": true,
 		"paths": {
-			"#bot/*": [
-				"./src/*",
-			]
+			"#bot/*": ["./src/*"]
 		}
 	},
-	"include": [
-		"./src/**/*"
-	],
-	"exclude": [
-		"node_modules"
-	]
+	"include": ["./src/**/*"],
+	"exclude": ["**/node_modules", "**/.*/"]
 }
